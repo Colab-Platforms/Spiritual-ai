@@ -14,8 +14,8 @@ export default {
     },
     extend: {
       fontFamily: {
-        display: ["Cinzel", "serif"],
-        body: ["Crimson Pro", "serif"],
+        display: ["Iceland", "sans-serif"],
+        body: ["Iceland", "sans-serif"],
       },
       colors: {
         border: "hsl(var(--border))",
@@ -53,12 +53,7 @@ export default {
         },
         cosmic: {
           dark: "hsl(var(--cosmic-dark))",
-          purple: "hsl(var(--cosmic-purple))",
-          blue: "hsl(var(--cosmic-blue))",
-        },
-        nebula: {
-          pink: "hsl(var(--nebula-pink))",
-          purple: "hsl(var(--nebula-purple))",
+          charcoal: "hsl(var(--cosmic-charcoal))",
         },
         star: {
           white: "hsl(var(--star-white))",
@@ -66,6 +61,7 @@ export default {
         gold: {
           DEFAULT: "hsl(var(--gold))",
           dim: "hsl(var(--gold-dim))",
+          glow: "hsl(var(--gold-glow))",
         },
       },
       borderRadius: {
@@ -98,6 +94,10 @@ export default {
           "0%": { transform: "rotate(0deg) translateX(100px) rotate(0deg)" },
           "100%": { transform: "rotate(360deg) translateX(100px) rotate(-360deg)" },
         },
+        "rotate-slow": {
+          "0%": { transform: "rotate(0deg)" },
+          "100%": { transform: "rotate(360deg)" },
+        },
       },
       animation: {
         "accordion-down": "accordion-down 0.2s ease-out",
@@ -106,6 +106,7 @@ export default {
         "fade-in-up": "fade-in-up 0.8s ease-out forwards",
         "scale-in": "scale-in 0.4s ease-out forwards",
         orbit: "orbit 20s linear infinite",
+        "rotate-slow": "rotate-slow 120s linear infinite",
       },
     },
   },
