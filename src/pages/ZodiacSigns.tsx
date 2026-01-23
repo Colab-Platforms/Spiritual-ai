@@ -11,17 +11,17 @@ const ZodiacWheel = () => {
   const signs = zodiacSigns.map(s => ({ name: s.name, symbol: s.symbol }));
   
   return (
-    <div className="relative w-64 h-64 md:w-80 md:h-80 mx-auto">
+    <div className="relative w-56 h-56 md:w-72 md:h-72 mx-auto">
       {/* Outer ring */}
-      <div className="absolute inset-0 rounded-full border border-accent/30" />
+      <div className="absolute inset-0 rounded-full border border-primary/30" />
       
       {/* Inner rings */}
-      <div className="absolute inset-8 rounded-full border border-accent/20" />
-      <div className="absolute inset-16 rounded-full border border-accent/10" />
+      <div className="absolute inset-8 rounded-full border border-primary/20" />
+      <div className="absolute inset-16 rounded-full border border-primary/10" />
       
       {/* Center star pattern */}
       <div className="absolute inset-0 flex items-center justify-center">
-        <svg viewBox="0 0 100 100" className="w-20 h-20 text-accent/40">
+        <svg viewBox="0 0 100 100" className="w-16 h-16 text-primary/40">
           <polygon points="50,5 61,40 98,40 68,62 79,97 50,75 21,97 32,62 2,40 39,40" fill="none" stroke="currentColor" strokeWidth="0.5"/>
         </svg>
       </div>
@@ -36,12 +36,12 @@ const ZodiacWheel = () => {
         return (
           <div
             key={sign.name}
-            className="absolute text-accent text-lg md:text-xl transition-all duration-300 hover:scale-125 hover:text-accent cursor-pointer"
+            className="absolute text-primary text-lg md:text-xl transition-all duration-300 hover:scale-125 cursor-pointer"
             style={{
               left: `${x}%`,
               top: `${y}%`,
               transform: 'translate(-50%, -50%)',
-              textShadow: '0 0 10px rgba(232,175,93,0.5)'
+              textShadow: '0 0 10px rgba(245,195,106,0.5)'
             }}
             title={sign.name}
           >
@@ -140,7 +140,7 @@ const ZodiacSigns = () => {
           ].map((element) => (
             <div 
               key={element.name} 
-              className="flex items-center gap-2 px-4 py-2 rounded-full border border-accent/20 bg-[#0a0a0f]"
+              className="flex items-center gap-2 px-4 py-2 rounded-full border border-primary/20 bg-card"
             >
               <div 
                 className="w-2 h-2 rounded-full"
