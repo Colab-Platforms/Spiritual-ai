@@ -129,7 +129,7 @@ const Index = () => {
       </Suspense>
 
       {/* How It Works Section */}
-      <section ref={featuresRef} className="relative z-10 py-24 bg-background">
+      <section ref={featuresRef} className="relative z-10 py-24 bg-transparent">
         <div className="container mx-auto px-4">
           <div className="text-center mb-16">
             <h2 className="font-display text-3xl md:text-4xl tracking-wider text-glow text-primary mb-4">
@@ -156,7 +156,7 @@ const Index = () => {
       </section>
 
       {/* What We Offer Section */}
-      <section ref={offerRef} className="relative z-10 py-24 bg-background">
+      <section ref={offerRef} className="relative z-10 py-24 bg-transparent">
         <div className="container mx-auto px-4">
           <div className="text-center mb-16">
             <h2 className="font-display text-3xl md:text-4xl tracking-wider text-glow text-primary mb-4">
@@ -190,7 +190,7 @@ const Index = () => {
       <ZodiacWheelSection />
 
       {/* Why Trust Section */}
-      <section ref={trustRef} className="relative z-10 py-24 bg-background">
+      <section ref={trustRef} className="relative z-10 py-24 bg-transparent">
         <div className="container mx-auto px-4">
           <div className="glass-card rounded-3xl p-8 md:p-12">
             <div className="grid lg:grid-cols-2 gap-12 items-center">
@@ -232,7 +232,7 @@ const Index = () => {
       </section>
 
       {/* Newsletter CTA Section */}
-      <section className="relative z-10 py-24 bg-background">
+      <section className="relative z-10 py-24 bg-transparent">
         <div className="container mx-auto px-4">
           <div className="glass-card rounded-3xl p-8 md:p-12 text-center max-w-3xl mx-auto relative overflow-hidden">
             {/* Decorative corners */}
