@@ -53,7 +53,7 @@ export const ScrollytellingHero = () => {
   const showZodiac = scrollProgress > 0.6;
 
   return (
-    <div ref={containerRef} className="relative" style={{ height: "400vh" }}>
+    <div ref={containerRef} className="relative" style={{ height: "200vh" }}>
       {/* Sticky container */}
       <div className="sticky top-0 h-screen overflow-hidden">
         {/* Animated background */}
