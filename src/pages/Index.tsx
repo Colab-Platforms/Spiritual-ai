@@ -110,14 +110,17 @@ const Index = () => {
         <ScrollytellingHero />
       </Suspense>
 
-      {/* How It Works Section */}
-      <section ref={featuresRef} className="relative z-10 py-24 bg-background">
-        <div className="container mx-auto px-4">
-          <div className="text-center mb-16">
-            <h2 className="font-display text-3xl md:text-4xl tracking-wider text-glow text-primary mb-4">
+      {/* How It Works Section - Reduced top spacing */}
+      <section ref={featuresRef} className="relative z-10 py-16 overflow-hidden">
+        {/* Glassmorphism background */}
+        <div className="absolute inset-0 bg-background/40 backdrop-blur-sm" />
+        
+        <div className="container mx-auto px-4 relative">
+          <div className="text-center mb-12">
+            <h2 className="font-display text-4xl md:text-5xl tracking-wider text-glow text-primary mb-4">
               How It Works
             </h2>
-            <p className="text-muted-foreground max-w-xl mx-auto tracking-wide">
+            <p className="text-muted-foreground text-lg max-w-xl mx-auto tracking-wide">
               Your journey to cosmic enlightenment in four simple steps
             </p>
           </div>
@@ -126,16 +129,16 @@ const Index = () => {
             {howItWorks.map((item, index) => (
               <div 
                 key={index}
-                className="step-card glass-card-hover rounded-2xl p-6 text-center relative"
+                className="step-card glass-card-hover bg-card/30 backdrop-blur-xl rounded-2xl p-6 text-center relative border-primary/10"
               >
                 <div className="absolute top-4 left-4 text-5xl font-display text-primary/10">
                   {item.step}
                 </div>
-                <div className="w-14 h-14 mx-auto mb-5 rounded-xl border border-primary/30 flex items-center justify-center bg-primary/5">
-                  <item.icon className="w-7 h-7 text-primary" />
+                <div className="w-16 h-16 mx-auto mb-5 rounded-xl border border-primary/30 flex items-center justify-center bg-primary/5">
+                  <item.icon className="w-8 h-8 text-primary" />
                 </div>
-                <h3 className="font-display text-lg tracking-wider text-foreground mb-2">{item.title}</h3>
-                <p className="text-sm text-muted-foreground">{item.description}</p>
+                <h3 className="font-display text-xl tracking-wider text-foreground mb-2">{item.title}</h3>
+                <p className="text-base text-muted-foreground">{item.description}</p>
               </div>
             ))}
           </div>
@@ -143,13 +146,16 @@ const Index = () => {
       </section>
 
       {/* What We Offer Section */}
-      <section ref={offerRef} className="relative z-10 py-24 bg-background">
-        <div className="container mx-auto px-4">
-          <div className="text-center mb-16">
-            <h2 className="font-display text-3xl md:text-4xl tracking-wider text-glow text-primary mb-4">
+      <section ref={offerRef} className="relative z-10 py-16 overflow-hidden">
+        {/* Glassmorphism background */}
+        <div className="absolute inset-0 bg-background/40 backdrop-blur-sm" />
+        
+        <div className="container mx-auto px-4 relative">
+          <div className="text-center mb-12">
+            <h2 className="font-display text-4xl md:text-5xl tracking-wider text-glow text-primary mb-4">
               What We Offer
             </h2>
-            <p className="text-muted-foreground max-w-xl mx-auto tracking-wide">
+            <p className="text-muted-foreground text-lg max-w-xl mx-auto tracking-wide">
               Comprehensive cosmic guidance for every aspect of your life
             </p>
           </div>
@@ -158,15 +164,15 @@ const Index = () => {
             {offerings.map((item, index) => (
               <div 
                 key={index}
-                className="offer-card glass-card rounded-2xl p-6 border border-border hover:border-primary/40 transition-all duration-500 group cursor-pointer hover:shadow-[0_0_30px_rgba(245,195,106,0.1)]"
+                className="offer-card glass-card bg-card/30 backdrop-blur-xl rounded-2xl p-6 border border-primary/10 hover:border-primary/40 transition-all duration-500 group cursor-pointer hover:shadow-[0_0_30px_rgba(245,195,106,0.1)]"
               >
-                <div className="w-12 h-12 mb-4 rounded-lg border border-primary/30 flex items-center justify-center bg-primary/5 group-hover:bg-primary/10 transition-colors">
-                  <item.icon className="w-6 h-6 text-primary" />
+                <div className="w-14 h-14 mb-4 rounded-lg border border-primary/30 flex items-center justify-center bg-primary/5 group-hover:bg-primary/10 transition-colors">
+                  <item.icon className="w-7 h-7 text-primary" />
                 </div>
-                <h3 className="font-display text-xl tracking-wider text-foreground mb-2 group-hover:text-primary transition-colors">
+                <h3 className="font-display text-2xl tracking-wider text-foreground mb-2 group-hover:text-primary transition-colors">
                   {item.title}
                 </h3>
-                <p className="text-sm text-muted-foreground">{item.description}</p>
+                <p className="text-base text-muted-foreground">{item.description}</p>
               </div>
             ))}
           </div>
@@ -177,28 +183,31 @@ const Index = () => {
       <ZodiacWheelSection />
 
       {/* Why Trust Section */}
-      <section ref={trustRef} className="relative z-10 py-24 bg-background">
-        <div className="container mx-auto px-4">
-          <div className="glass-card rounded-3xl p-8 md:p-12">
+      <section ref={trustRef} className="relative z-10 py-16 overflow-hidden">
+        {/* Glassmorphism background */}
+        <div className="absolute inset-0 bg-background/40 backdrop-blur-sm" />
+        
+        <div className="container mx-auto px-4 relative">
+          <div className="glass-card bg-card/30 backdrop-blur-xl rounded-3xl p-8 md:p-12 border-primary/10">
             <div className="grid lg:grid-cols-2 gap-12 items-center">
               <div>
                 <div className="inline-flex items-center gap-2 text-primary mb-4">
-                  <Shield className="w-5 h-5" />
-                  <span className="text-sm uppercase tracking-[0.2em]">Trust & Accuracy</span>
+                  <Shield className="w-6 h-6" />
+                  <span className="text-base uppercase tracking-[0.2em]">Trust & Accuracy</span>
                 </div>
-                <h2 className="font-display text-3xl md:text-4xl tracking-wider text-foreground mb-6">
+                <h2 className="font-display text-4xl md:text-5xl tracking-wider text-foreground mb-6">
                   Why Trust Our Astrology
                 </h2>
-                <p className="text-muted-foreground leading-relaxed mb-8">
+                <p className="text-muted-foreground text-lg leading-relaxed mb-8">
                   Our readings combine ancient astrological wisdom with modern psychological insights, 
                   providing you with accurate, meaningful guidance for your journey through life.
                 </p>
                 <Link 
                   to="/about" 
-                  className="btn-cosmic px-6 py-3 rounded-lg inline-flex items-center gap-2"
+                  className="btn-cosmic px-8 py-4 rounded-lg inline-flex items-center gap-2 text-lg"
                 >
                   Learn More
-                  <ArrowRight className="w-4 h-4" />
+                  <ArrowRight className="w-5 h-5" />
                 </Link>
               </div>
               
@@ -206,12 +215,12 @@ const Index = () => {
                 {trustReasons.map((reason, index) => (
                   <div 
                     key={index}
-                    className="trust-item flex items-start gap-4 p-4 rounded-xl bg-card/50 border border-border hover:border-primary/30 transition-colors"
+                    className="trust-item flex items-start gap-4 p-5 rounded-xl bg-card/40 backdrop-blur-sm border border-primary/10 hover:border-primary/30 transition-colors"
                   >
-                    <div className="w-2 h-2 mt-2 rounded-full bg-primary flex-shrink-0" />
+                    <div className="w-2.5 h-2.5 mt-2 rounded-full bg-primary flex-shrink-0" />
                     <div>
-                      <h4 className="font-display text-lg tracking-wider text-foreground mb-1">{reason.title}</h4>
-                      <p className="text-sm text-muted-foreground">{reason.description}</p>
+                      <h4 className="font-display text-xl tracking-wider text-foreground mb-1">{reason.title}</h4>
+                      <p className="text-base text-muted-foreground">{reason.description}</p>
                     </div>
                   </div>
                 ))}
@@ -222,20 +231,23 @@ const Index = () => {
       </section>
 
       {/* Newsletter CTA Section */}
-      <section className="relative z-10 py-24 bg-background">
-        <div className="container mx-auto px-4">
-          <div className="glass-card rounded-3xl p-8 md:p-12 text-center max-w-3xl mx-auto relative overflow-hidden">
+      <section className="relative z-10 py-16 overflow-hidden">
+        {/* Glassmorphism background */}
+        <div className="absolute inset-0 bg-background/40 backdrop-blur-sm" />
+        
+        <div className="container mx-auto px-4 relative">
+          <div className="glass-card bg-card/30 backdrop-blur-xl rounded-3xl p-8 md:p-12 text-center max-w-3xl mx-auto relative overflow-hidden border-primary/10">
             {/* Decorative corners */}
-            <div className="absolute top-4 left-4 w-8 h-8 border-l-2 border-t-2 border-primary/30" />
-            <div className="absolute top-4 right-4 w-8 h-8 border-r-2 border-t-2 border-primary/30" />
-            <div className="absolute bottom-4 left-4 w-8 h-8 border-l-2 border-b-2 border-primary/30" />
-            <div className="absolute bottom-4 right-4 w-8 h-8 border-r-2 border-b-2 border-primary/30" />
+            <div className="absolute top-4 left-4 w-10 h-10 border-l-2 border-t-2 border-primary/40" />
+            <div className="absolute top-4 right-4 w-10 h-10 border-r-2 border-t-2 border-primary/40" />
+            <div className="absolute bottom-4 left-4 w-10 h-10 border-l-2 border-b-2 border-primary/40" />
+            <div className="absolute bottom-4 right-4 w-10 h-10 border-r-2 border-b-2 border-primary/40" />
             
-            <Sparkles className="w-10 h-10 text-primary mx-auto mb-6" />
-            <h2 className="font-display text-2xl md:text-3xl tracking-wider text-foreground mb-4">
+            <Sparkles className="w-12 h-12 text-primary mx-auto mb-6" />
+            <h2 className="font-display text-3xl md:text-4xl tracking-wider text-foreground mb-4">
               Receive Daily Cosmic Wisdom
             </h2>
-            <p className="text-muted-foreground mb-8 max-w-md mx-auto">
+            <p className="text-muted-foreground text-lg mb-8 max-w-md mx-auto">
               Subscribe to get personalized horoscopes and celestial insights delivered to your inbox.
             </p>
             <NewsletterForm />
