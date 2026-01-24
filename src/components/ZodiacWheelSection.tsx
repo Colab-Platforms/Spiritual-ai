@@ -147,9 +147,10 @@ export const ZodiacWheelSection = () => {
 
   return (
     <section ref={sectionRef} className="relative z-10 py-16 bg-transparent overflow-hidden">
-      {/* Background glow for better wheel visibility */}
-      <div className="absolute inset-0 pointer-events-none">
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-primary/8 rounded-full blur-[150px]" />
+      {/* Background cosmic effects */}
+      <div className="absolute inset-0 opacity-30 pointer-events-none">
+        <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-primary/5 rounded-full blur-[100px]" />
+        <div className="absolute bottom-1/4 right-1/4 w-80 h-80 bg-primary/3 rounded-full blur-[80px]" />
       </div>
 
       <div className="container mx-auto px-4">
@@ -258,22 +259,19 @@ export const ZodiacWheelSection = () => {
           {/* Right: Zodiac Wheel */}
           <div className="order-1 lg:order-2 flex items-center justify-center">
             <div className="relative w-full max-w-[520px] aspect-square">
-              {/* Bright background glow for wheel */}
-              <div className="absolute inset-[-20%] rounded-full bg-gradient-radial from-primary/15 via-primary/5 to-transparent blur-2xl" />
-              
-              {/* Outer static decorative ring - brighter */}
-              <div className="absolute inset-0 rounded-full border-2 border-primary/30 shadow-[0_0_30px_rgba(245,195,106,0.2)]" />
-              <div className="absolute inset-[5%] rounded-full border border-primary/25" />
+              {/* Outer static decorative ring */}
+              <div className="absolute inset-0 rounded-full border border-primary/10" />
+              <div className="absolute inset-[5%] rounded-full border border-primary/15" />
               
               {/* Rotating wheel container */}
               <div 
                 ref={wheelRef}
                 className="absolute inset-[10%] rounded-full"
               >
-                {/* Inner circles - brighter */}
-                <div className="absolute inset-0 rounded-full border-2 border-primary/35 shadow-[0_0_20px_rgba(245,195,106,0.15)]" />
-                <div className="absolute inset-[15%] rounded-full border border-primary/25 border-dashed" />
-                <div className="absolute inset-[35%] rounded-full border border-primary/20" />
+                {/* Inner circles */}
+                <div className="absolute inset-0 rounded-full border border-primary/20" />
+                <div className="absolute inset-[15%] rounded-full border border-primary/15 border-dashed" />
+                <div className="absolute inset-[35%] rounded-full border border-primary/10" />
                 
                 {/* Division lines */}
                 {Array.from({ length: 12 }).map((_, i) => (
@@ -310,17 +308,17 @@ export const ZodiacWheelSection = () => {
                         src={zodiacImages[sign.name]}
                         alt={sign.name}
                         className={`
-                          w-12 h-12 md:w-14 md:h-14 object-contain
+                          w-10 h-10 md:w-12 md:h-12 object-contain
                           transition-all duration-300
                           ${isSelected 
-                            ? 'scale-130' 
-                            : 'group-hover:scale-115'
+                            ? 'scale-125 filter brightness-125' 
+                            : 'scale-100 filter brightness-90 group-hover:brightness-110 group-hover:scale-110'
                           }
                         `}
                         style={{
                           filter: isSelected 
-                            ? 'brightness(1.4) drop-shadow(0 0 20px rgba(245, 195, 106, 0.9)) drop-shadow(0 0 40px rgba(245, 195, 106, 0.6)) drop-shadow(0 0 60px rgba(245, 195, 106, 0.3))' 
-                            : 'brightness(1.1) drop-shadow(0 0 12px rgba(245, 195, 106, 0.5)) drop-shadow(0 0 25px rgba(245, 195, 106, 0.25))'
+                            ? 'drop-shadow(0 0 15px rgba(245, 195, 106, 0.7)) drop-shadow(0 0 30px rgba(245, 195, 106, 0.4))' 
+                            : 'drop-shadow(0 0 6px rgba(245, 195, 106, 0.3))'
                         }}
                       />
                     </button>
