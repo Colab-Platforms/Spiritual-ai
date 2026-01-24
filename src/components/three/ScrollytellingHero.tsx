@@ -3,9 +3,9 @@ import { motion, useScroll, useTransform } from "framer-motion";
 import { Link } from "react-router-dom";
 import { ArrowRight, ChevronDown } from "lucide-react";
 import SolarSystem from "./SolarSystem";
-import CloudLayer from "./CloudLayer";
-import MountainSilhouette from "./MountainSilhouette";
-import ZodiacFormation from "./ZodiacFormation";
+// import CloudLayer from "./CloudLayer"; // Commented out - not needed
+// import MountainSilhouette from "./MountainSilhouette"; // Commented out - not needed
+// import ZodiacFormation from "./ZodiacFormation"; // Commented out - not needed
 
 // Loading fallback for 3D scene
 const SceneLoader = () => (
