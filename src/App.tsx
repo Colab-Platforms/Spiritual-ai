@@ -34,14 +34,14 @@ const AnimatedRoutes = () => {
             </PageTransition>
           }
         />
-        <Route
+        {/* <Route
           path="/horoscopes"
           element={
             <PageTransition>
               <DailyHoroscopes />
             </PageTransition>
           }
-        />
+        /> */}
         <Route
           path="/zodiac"
           element={
