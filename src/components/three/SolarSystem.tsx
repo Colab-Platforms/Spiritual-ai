@@ -1,8 +1,8 @@
 import { useRef, useMemo, useEffect } from 'react';
 import { Canvas, useFrame, useThree, extend } from '@react-three/fiber';
-import { Stars, Sphere, shaderMaterial } from '@react-three/drei';
+import { Stars, Sphere, shaderMaterial, useTexture } from '@react-three/drei';
 import * as THREE from 'three';
-
+import sunTextureImg from '@/assets/sun-texture.png';
 // Custom shader for realistic planet atmosphere glow
 const AtmosphereShaderMaterial = shaderMaterial(
   {
@@ -35,45 +35,52 @@ const AtmosphereShaderMaterial = shaderMaterial(
 
 extend({ AtmosphereShaderMaterial });
 
-// Sun component with realistic glow effect
+// Sun component with realistic texture and glow effect
 const Sun = () => {
   const sunRef = useRef<THREE.Mesh>(null);
   const coronaRef = useRef<THREE.Mesh>(null);
+  const sunTexture = useTexture(sunTextureImg);
+  
+  // Configure texture for spherical mapping
+  sunTexture.wrapS = THREE.RepeatWrapping;
+  sunTexture.wrapT = THREE.ClampToEdgeWrapping;
   
   useFrame(({ clock }) => {
     if (sunRef.current) {
-      sunRef.current.rotation.y = clock.getElapsedTime() * 0.05;
+      sunRef.current.rotation.y = clock.getElapsedTime() * 0.03;
     }
     if (coronaRef.current) {
       coronaRef.current.rotation.z = clock.getElapsedTime() * 0.02;
-      const scale = 1 + Math.sin(clock.getElapsedTime() * 0.5) * 0.05;
+      const scale = 1 + Math.sin(clock.getElapsedTime() * 0.5) * 0.03;
       coronaRef.current.scale.setScalar(scale);
     }
   });
 
   return (
     <group>
-      {/* Core sun with emissive material */}
+      {/* Core sun with texture */}
       <Sphere ref={sunRef} args={[2, 64, 64]} position={[0, 0, 0]}>
-        <meshStandardMaterial 
-          color="#ffcc44"
-          emissive="#ff8800"
-          emissiveIntensity={2}
-          roughness={1}
+        <meshBasicMaterial 
+          map={sunTexture}
+          color="#ffffff"
         />
       </Sphere>
+      {/* Inner glow layer */}
+      <Sphere args={[2.05, 48, 48]} position={[0, 0, 0]}>
+        <meshBasicMaterial color="#ffaa33" transparent opacity={0.3} />
+      </Sphere>
       {/* Corona layers */}
-      <Sphere ref={coronaRef} args={[2.3, 32, 32]} position={[0, 0, 0]}>
-        <meshBasicMaterial color="#ffaa33" transparent opacity={0.4} />
+      <Sphere ref={coronaRef} args={[2.2, 32, 32]} position={[0, 0, 0]}>
+        <meshBasicMaterial color="#ff9922" transparent opacity={0.25} />
       </Sphere>
-      <Sphere args={[2.6, 32, 32]} position={[0, 0, 0]}>
-        <meshBasicMaterial color="#ff9922" transparent opacity={0.2} />
+      <Sphere args={[2.5, 32, 32]} position={[0, 0, 0]}>
+        <meshBasicMaterial color="#ff8811" transparent opacity={0.15} />
       </Sphere>
-      <Sphere args={[3.2, 32, 32]} position={[0, 0, 0]}>
-        <meshBasicMaterial color="#ff8811" transparent opacity={0.1} />
+      <Sphere args={[3, 32, 32]} position={[0, 0, 0]}>
+        <meshBasicMaterial color="#ff6600" transparent opacity={0.08} />
       </Sphere>
-      <Sphere args={[4, 32, 32]} position={[0, 0, 0]}>
-        <meshBasicMaterial color="#ff6600" transparent opacity={0.05} />
+      <Sphere args={[3.8, 32, 32]} position={[0, 0, 0]}>
+        <meshBasicMaterial color="#ff4400" transparent opacity={0.04} />
       </Sphere>
       {/* Point light from sun */}
       <pointLight color="#ffcc66" intensity={3} distance={150} decay={2} />
