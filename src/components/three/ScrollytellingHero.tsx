@@ -39,11 +39,11 @@ export const ScrollytellingHero = () => {
     return () => unsubscribe();
   }, [scrollYProgress, hasAssembled]);
 
-  // Background color transition
+  // Background color transition - using actual color values for framer-motion
   const bgColor = useTransform(
     scrollYProgress,
     [0, 0.5, 1],
-    ['hsl(220, 20%, 4%)', 'hsl(230, 25%, 10%)', 'hsl(var(--background))']
+    ['#060a0e', '#111a24', '#0d1117']
   );
   
   // Hero content fade
