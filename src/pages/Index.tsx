@@ -124,7 +124,9 @@ const Index = () => {
   return (
     <div className="relative">
       {/* 3D Scrollytelling Hero Section */}
-      <Suspense fallback={<HeroLoader />}>{/* <ScrollytellingHero /> */}</Suspense>
+      <Suspense fallback={<HeroLoader />}>
+        <ScrollytellingHero />
+      </Suspense>
 
       {/* How It Works Section */}
       <section ref={featuresRef} className="relative z-10 py-24 bg-background">
