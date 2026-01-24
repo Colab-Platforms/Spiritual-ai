@@ -295,51 +295,42 @@ export const ZodiacWheelSection = () => {
                 {/* Center glow */}
                 <div className="absolute inset-[40%] rounded-full bg-gradient-radial from-primary/10 to-transparent" />
                 
-                {/* Zodiac icons positioned around the wheel */}
+                {/* Zodiac icons positioned in a proper circle */}
                 {zodiacSigns.map((sign, index) => {
-                  const { angle } = getZodiacPosition(index, 0);
+                  const angle = (index * 30 - 90) * (Math.PI / 180);
+                  const radius = 42; // percentage from center
+                  const x = 50 + Math.cos(angle) * radius;
+                  const y = 50 + Math.sin(angle) * radius;
                   const isSelected = selectedSign.name === sign.name;
                   
                   return (
                     <button
                       key={sign.name}
                       onClick={() => handleSignClick(sign)}
-                      className="absolute w-14 h-14 md:w-16 md:h-16 -translate-x-1/2 -translate-y-1/2 transition-all duration-300 focus:outline-none group"
+                      className="absolute -translate-x-1/2 -translate-y-1/2 transition-all duration-300 focus:outline-none group"
                       style={{
-                        top: '50%',
-                        left: '50%',
-                        transform: `rotate(${angle}deg) translateY(-170%) rotate(-${angle}deg)`,
+                        left: `${x}%`,
+                        top: `${y}%`,
                       }}
                     >
-                      {/* Icon container with glow */}
-                      <div 
+                      {/* Just the icon with glow - no card */}
+                      <img 
+                        src={zodiacImages[sign.name]}
+                        alt={sign.name}
                         className={`
-                          w-full h-full rounded-full flex items-center justify-center
-                          transition-all duration-300 
+                          w-10 h-10 md:w-12 md:h-12 object-contain
+                          transition-all duration-300
                           ${isSelected 
-                            ? 'scale-110 bg-primary/15' 
-                            : 'scale-100 bg-transparent hover:bg-primary/10 hover:scale-105'
+                            ? 'scale-125 filter brightness-125' 
+                            : 'scale-100 filter brightness-90 group-hover:brightness-110 group-hover:scale-110'
                           }
                         `}
                         style={{
-                          boxShadow: isSelected 
-                            ? '0 0 30px rgba(245, 195, 106, 0.4), 0 0 60px rgba(245, 195, 106, 0.2)' 
-                            : 'none',
+                          filter: isSelected 
+                            ? 'drop-shadow(0 0 15px rgba(245, 195, 106, 0.7)) drop-shadow(0 0 30px rgba(245, 195, 106, 0.4))' 
+                            : 'drop-shadow(0 0 6px rgba(245, 195, 106, 0.3))'
                         }}
-                      >
-                        <img 
-                          src={zodiacImages[sign.name]}
-                          alt={sign.name}
-                          className={`
-                            w-10 h-10 md:w-12 md:h-12 object-contain
-                            transition-all duration-300
-                            ${isSelected 
-                              ? 'filter brightness-125 drop-shadow-[0_0_12px_rgba(245,195,106,0.6)]' 
-                              : 'filter brightness-90 group-hover:brightness-110 drop-shadow-[0_0_6px_rgba(245,195,106,0.3)]'
-                            }
-                          `}
-                        />
-                      </div>
+                      />
                     </button>
                   );
                 })}
