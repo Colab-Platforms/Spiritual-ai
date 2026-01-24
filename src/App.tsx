@@ -22,20 +22,90 @@ const queryClient = new QueryClient();
 // Animated routes component
 const AnimatedRoutes = () => {
   const location = useLocation();
-  
+
   return (
     <AnimatePresence mode="wait" initial={false}>
       <Routes location={location} key={location.pathname}>
-        <Route path="/" element={<PageTransition><Index /></PageTransition>} />
-        {/* <Route path="/horoscopes" element={<PageTransition><DailyHoroscopes /></PageTransition>} /> */}
-        <Route path="/zodiac" element={<PageTransition><ZodiacSigns /></PageTransition>} />
-        <Route path="/zodiac/:sign" element={<PageTransition><ZodiacDetail /></PageTransition>} />
-        <Route path="/compatibility" element={<PageTransition><CompatibilityChecker /></PageTransition>} />
-        <Route path="/birth-chart" element={<PageTransition><BirthChart /></PageTransition>} />
-        <Route path="/blog" element={<PageTransition><Blog /></PageTransition>} />
-        <Route path="/about" element={<PageTransition><About /></PageTransition>} />
-        <Route path="/contact" element={<PageTransition><Contact /></PageTransition>} />
-        <Route path="*" element={<PageTransition><NotFound /></PageTransition>} />
+        <Route
+          path="/"
+          element={
+            <PageTransition>
+              <Index />
+            </PageTransition>
+          }
+        />
+        <Route
+          path="/horoscopes"
+          element={
+            <PageTransition>
+              <DailyHoroscopes />
+            </PageTransition>
+          }
+        />
+        <Route
+          path="/zodiac"
+          element={
+            <PageTransition>
+              <ZodiacSigns />
+            </PageTransition>
+          }
+        />
+        <Route
+          path="/zodiac/:sign"
+          element={
+            <PageTransition>
+              <ZodiacDetail />
+            </PageTransition>
+          }
+        />
+        <Route
+          path="/compatibility"
+          element={
+            <PageTransition>
+              <CompatibilityChecker />
+            </PageTransition>
+          }
+        />
+        <Route
+          path="/birth-chart"
+          element={
+            <PageTransition>
+              <BirthChart />
+            </PageTransition>
+          }
+        />
+        <Route
+          path="/blog"
+          element={
+            <PageTransition>
+              <Blog />
+            </PageTransition>
+          }
+        />
+        <Route
+          path="/about"
+          element={
+            <PageTransition>
+              <About />
+            </PageTransition>
+          }
+        />
+        <Route
+          path="/contact"
+          element={
+            <PageTransition>
+              <Contact />
+            </PageTransition>
+          }
+        />
+        <Route
+          path="*"
+          element={
+            <PageTransition>
+              <NotFound />
+            </PageTransition>
+          }
+        />
       </Routes>
     </AnimatePresence>
   );
