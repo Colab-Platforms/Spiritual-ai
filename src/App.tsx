@@ -7,7 +7,7 @@ import { AnimatePresence } from "framer-motion";
 import Layout from "./components/Layout";
 import PageTransition from "./components/PageTransition";
 import Index from "./pages/Index";
-// import DailyHoroscopes from "./pages/DailyHoroscopes"; // Hidden for now
+import DailyHoroscopes from "./pages/DailyHoroscopes";
 import ZodiacSigns from "./pages/ZodiacSigns";
 import ZodiacDetail from "./pages/ZodiacDetail";
 import CompatibilityChecker from "./pages/CompatibilityChecker";
@@ -34,14 +34,14 @@ const AnimatedRoutes = () => {
             </PageTransition>
           }
         />
-        {/* <Route
+        <Route
           path="/horoscopes"
           element={
             <PageTransition>
               <DailyHoroscopes />
             </PageTransition>
           }
-        /> */}
+        />
         <Route
           path="/zodiac"
           element={
