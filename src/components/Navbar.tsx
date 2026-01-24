@@ -1,16 +1,16 @@
-import { useState, useEffect } from 'react';
-import { Link, useLocation } from 'react-router-dom';
-import { Menu, X, Sparkles } from 'lucide-react';
-import gsap from 'gsap';
+import { useState, useEffect } from "react";
+import { Link, useLocation } from "react-router-dom";
+import { Menu, X, Sparkles } from "lucide-react";
+import gsap from "gsap";
 
 const navLinks = [
-  { name: 'Home', path: '/' },
+  { name: "Home", path: "/" },
   // { name: 'Daily Horoscopes', path: '/horoscopes' }, // Hidden for now
-  { name: 'Zodiac Signs', path: '/zodiac' },
-  { name: 'Compatibility', path: '/compatibility' },
-  { name: 'Birth Chart', path: '/birth-chart' },
-  { name: 'Blog', path: '/blog' },
-  { name: 'About', path: '/about' },
+  { name: "Zodiac Signs", path: "/zodiac" },
+  { name: "Compatibility", path: "/compatibility" },
+  { name: "Birth Chart", path: "/birth-chart" },
+  { name: "Blog", path: "/blog" },
+  { name: "About", path: "/about" },
 ];
 
 const Navbar = () => {
@@ -23,25 +23,24 @@ const Navbar = () => {
       setScrolled(window.scrollY > 50);
     };
 
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
   useEffect(() => {
     if (isOpen) {
-      gsap.fromTo('.mobile-nav-link', 
+      gsap.fromTo(
+        ".mobile-nav-link",
         { opacity: 0, x: -20 },
-        { opacity: 1, x: 0, stagger: 0.1, duration: 0.3, ease: 'power2.out' }
+        { opacity: 1, x: 0, stagger: 0.1, duration: 0.3, ease: "power2.out" },
       );
     }
   }, [isOpen]);
 
   return (
-    <nav 
+    <nav
       className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${
-        scrolled 
-          ? 'glass-card py-3' 
-          : 'py-5 bg-transparent'
+        scrolled ? "glass-card py-3" : "py-5 bg-transparent"
       }`}
     >
       <div className="container mx-auto px-4 md:px-6">
@@ -49,9 +48,7 @@ const Navbar = () => {
           {/* Logo */}
           <Link to="/" className="flex items-center gap-2 group">
             <Sparkles className="w-8 h-8 text-primary transition-transform duration-300 group-hover:rotate-12" />
-            <span className="font-display text-xl md:text-2xl text-glow text-primary">
-              Celestial
-            </span>
+            <span className="font-display text-xl md:text-2xl text-glow text-primary">S P I R I T U A L</span>
           </Link>
 
           {/* Desktop Navigation */}
@@ -61,9 +58,7 @@ const Navbar = () => {
                 key={link.name}
                 to={link.path}
                 className={`relative font-body text-sm tracking-wide transition-colors duration-300 ${
-                  location.pathname === link.path
-                    ? 'text-primary'
-                    : 'text-foreground/70 hover:text-primary'
+                  location.pathname === link.path ? "text-primary" : "text-foreground/70 hover:text-primary"
                 }`}
               >
                 {link.name}
@@ -94,9 +89,7 @@ const Navbar = () => {
                   to={link.path}
                   onClick={() => setIsOpen(false)}
                   className={`mobile-nav-link font-body text-lg transition-colors duration-300 ${
-                    location.pathname === link.path
-                      ? 'text-primary'
-                      : 'text-foreground/70 hover:text-primary'
+                    location.pathname === link.path ? "text-primary" : "text-foreground/70 hover:text-primary"
                   }`}
                 >
                   {link.name}
