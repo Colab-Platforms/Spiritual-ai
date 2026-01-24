@@ -1,4 +1,4 @@
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, lazy, Suspense } from 'react';
 import { Link } from 'react-router-dom';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
@@ -7,60 +7,28 @@ import { zodiacSigns } from '@/data/zodiacData';
 import ZodiacCard from '@/components/ZodiacCard';
 import NewsletterForm from '@/components/NewsletterForm';
 
-// Import zodiac images for the wheel
-import ariesImg from '@/assets/zodiac/aries.png';
-import taurusImg from '@/assets/zodiac/taurus.png';
-import geminiImg from '@/assets/zodiac/gemini.png';
-import cancerImg from '@/assets/zodiac/cancer.png';
-import leoImg from '@/assets/zodiac/leo.png';
-import virgoImg from '@/assets/zodiac/virgo.png';
-import libraImg from '@/assets/zodiac/libra.png';
-import scorpioImg from '@/assets/zodiac/scorpio.png';
-import sagittariusImg from '@/assets/zodiac/sagittarius.png';
-import capricornImg from '@/assets/zodiac/capricorn.png';
-import aquariusImg from '@/assets/zodiac/aquarius.png';
-import piscesImg from '@/assets/zodiac/pisces.png';
+// Lazy load the 3D scrollytelling hero for better initial load
+const ScrollytellingHero = lazy(() => import('@/components/three/ScrollytellingHero'));
 
 gsap.registerPlugin(ScrollTrigger);
 
-const zodiacWheelImages = [
-  { name: 'Aries', img: ariesImg },
-  { name: 'Taurus', img: taurusImg },
-  { name: 'Gemini', img: geminiImg },
-  { name: 'Cancer', img: cancerImg },
-  { name: 'Leo', img: leoImg },
-  { name: 'Virgo', img: virgoImg },
-  { name: 'Libra', img: libraImg },
-  { name: 'Scorpio', img: scorpioImg },
-  { name: 'Sagittarius', img: sagittariusImg },
-  { name: 'Capricorn', img: capricornImg },
-  { name: 'Aquarius', img: aquariusImg },
-  { name: 'Pisces', img: piscesImg },
-];
+// Loading fallback
+const HeroLoader = () => (
+  <div className="h-screen flex items-center justify-center bg-background">
+    <div className="flex flex-col items-center gap-4">
+      <div className="w-16 h-16 rounded-full border-2 border-primary border-t-transparent animate-spin" />
+      <span className="text-muted-foreground font-display tracking-wider">Initializing cosmos...</span>
+    </div>
+  </div>
+);
 
 const Index = () => {
-  const heroRef = useRef<HTMLDivElement>(null);
-  const wheelRef = useRef<HTMLDivElement>(null);
   const featuresRef = useRef<HTMLDivElement>(null);
   const offerRef = useRef<HTMLDivElement>(null);
   const trustRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const ctx = gsap.context(() => {
-      // Hero content animation
-      gsap.fromTo('.hero-content', 
-        { opacity: 0, y: 30 }, 
-        { opacity: 1, y: 0, duration: 1, ease: 'power3.out', delay: 0.3 }
-      );
-
-      // Zodiac wheel slow rotation
-      gsap.to(wheelRef.current, {
-        rotation: 360,
-        duration: 120,
-        repeat: -1,
-        ease: 'none',
-      });
-
       // How it works section
       gsap.fromTo('.step-card',
         { opacity: 0, y: 40 },
@@ -138,90 +106,13 @@ const Index = () => {
 
   return (
     <div className="relative">
-      {/* Hero Section with Zodiac Wheel */}
-      <section ref={heroRef} className="relative min-h-screen flex items-center justify-center overflow-hidden pt-20">
-        {/* Central Zodiac Wheel */}
-        <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
-          <div 
-            ref={wheelRef}
-            className="relative w-[600px] h-[600px] md:w-[800px] md:h-[800px] opacity-30"
-          >
-            {/* Outer ring */}
-            <div className="absolute inset-0 rounded-full border border-primary/20" />
-            <div className="absolute inset-8 rounded-full border border-primary/15" />
-            <div className="absolute inset-16 rounded-full border border-primary/10" />
-            
-            {/* Zodiac symbols around the wheel */}
-            {zodiacWheelImages.map((zodiac, index) => {
-              const angle = (index * 30 - 90) * (Math.PI / 180);
-              const radius = 42;
-              const x = 50 + radius * Math.cos(angle);
-              const y = 50 + radius * Math.sin(angle);
-              
-              return (
-                <div
-                  key={zodiac.name}
-                  className="absolute w-12 h-12 md:w-16 md:h-16 -translate-x-1/2 -translate-y-1/2"
-                  style={{
-                    left: `${x}%`,
-                    top: `${y}%`,
-                  }}
-                >
-                  <img 
-                    src={zodiac.img} 
-                    alt={zodiac.name}
-                    className="w-full h-full object-contain opacity-60"
-                  />
-                </div>
-              );
-            })}
-
-            {/* Center mystical geometry */}
-            <div className="absolute inset-[35%] rounded-full border border-primary/30 flex items-center justify-center">
-              <div className="w-4 h-4 rounded-full bg-primary/50 animate-pulse-glow" />
-            </div>
-          </div>
-        </div>
-
-        {/* Hero Content */}
-        <div className="hero-content relative z-10 container mx-auto px-4 text-center">
-          <h1 className="font-display text-4xl md:text-6xl lg:text-7xl tracking-wider mb-6">
-            <span className="text-cosmic">Discover Your</span>
-            <br />
-            <span className="text-foreground">Cosmic Blueprint</span>
-          </h1>
-
-          <p className="font-body text-lg md:text-xl text-muted-foreground max-w-xl mx-auto mb-10 tracking-wide">
-            Unlock the ancient wisdom of the stars and illuminate your path forward
-          </p>
-
-          <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
-            <Link 
-              to="/zodiac" 
-              className="btn-cosmic btn-pulse px-8 py-4 rounded-lg inline-flex items-center gap-3"
-            >
-              Explore Your Sign
-              <ArrowRight className="w-5 h-5" />
-            </Link>
-            <Link 
-              to="/horoscopes" 
-              className="btn-outline-cosmic px-8 py-4 rounded-lg"
-            >
-              Daily Horoscope
-            </Link>
-          </div>
-        </div>
-
-        {/* Scroll indicator */}
-        <div className="absolute bottom-10 left-1/2 -translate-x-1/2 animate-bounce">
-          <div className="w-6 h-10 rounded-full border-2 border-primary/30 flex items-start justify-center p-2">
-            <div className="w-1 h-3 bg-primary rounded-full animate-pulse-glow" />
-          </div>
-        </div>
-      </section>
+      {/* 3D Scrollytelling Hero Section */}
+      <Suspense fallback={<HeroLoader />}>
+        <ScrollytellingHero />
+      </Suspense>
 
       {/* How It Works Section */}
-      <section ref={featuresRef} className="relative z-10 py-24">
+      <section ref={featuresRef} className="relative z-10 py-24 bg-background">
         <div className="container mx-auto px-4">
           <div className="text-center mb-16">
             <h2 className="font-display text-3xl md:text-4xl tracking-wider text-glow text-primary mb-4">
@@ -253,7 +144,7 @@ const Index = () => {
       </section>
 
       {/* What We Offer Section */}
-      <section ref={offerRef} className="relative z-10 py-24">
+      <section ref={offerRef} className="relative z-10 py-24 bg-background">
         <div className="container mx-auto px-4">
           <div className="text-center mb-16">
             <h2 className="font-display text-3xl md:text-4xl tracking-wider text-glow text-primary mb-4">
@@ -284,7 +175,7 @@ const Index = () => {
       </section>
 
       {/* Zodiac Signs Grid */}
-      <section className="relative z-10 py-24">
+      <section className="relative z-10 py-24 bg-background">
         <div className="container mx-auto px-4">
           <div className="text-center mb-16">
             <h2 className="font-display text-3xl md:text-4xl tracking-wider text-glow text-primary mb-4">
@@ -316,7 +207,7 @@ const Index = () => {
       </section>
 
       {/* Why Trust Section */}
-      <section ref={trustRef} className="relative z-10 py-24">
+      <section ref={trustRef} className="relative z-10 py-24 bg-background">
         <div className="container mx-auto px-4">
           <div className="glass-card rounded-3xl p-8 md:p-12">
             <div className="grid lg:grid-cols-2 gap-12 items-center">
@@ -361,7 +252,7 @@ const Index = () => {
       </section>
 
       {/* Newsletter CTA Section */}
-      <section className="relative z-10 py-24">
+      <section className="relative z-10 py-24 bg-background">
         <div className="container mx-auto px-4">
           <div className="glass-card rounded-3xl p-8 md:p-12 text-center max-w-3xl mx-auto relative overflow-hidden">
             {/* Decorative corners */}
