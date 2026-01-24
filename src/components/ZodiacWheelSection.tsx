@@ -1,5 +1,5 @@
 import { useState, useRef, useEffect, useCallback } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import gsap from 'gsap';
 import { ArrowRight, Flame, Mountain, Wind, Droplets } from 'lucide-react';
@@ -143,20 +143,10 @@ export const ZodiacWheelSection = () => {
     navigate(`/zodiac/${selectedSign.name.toLowerCase()}`);
   }, [navigate, selectedSign]);
 
-  // Calculate position for each zodiac on the wheel
-  const getZodiacPosition = (index: number, radius: number) => {
-    const angle = (index * 30 - 90) * (Math.PI / 180);
-    return {
-      x: Math.cos(angle) * radius,
-      y: Math.sin(angle) * radius,
-      angle: index * 30,
-    };
-  };
-
   const ElementIcon = elementIcons[selectedSign.element];
 
   return (
-    <section ref={sectionRef} className="relative z-10 py-24 bg-background overflow-hidden">
+    <section ref={sectionRef} className="relative z-10 py-16 bg-transparent overflow-hidden">
       {/* Background cosmic effects */}
       <div className="absolute inset-0 opacity-30 pointer-events-none">
         <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-primary/5 rounded-full blur-[100px]" />
@@ -165,20 +155,20 @@ export const ZodiacWheelSection = () => {
 
       <div className="container mx-auto px-4">
         {/* Section header */}
-        <div className="text-center mb-16">
-          <h2 className="font-display text-3xl md:text-4xl tracking-wider text-glow text-primary mb-4">
+        <div className="text-center mb-12">
+          <h2 className="font-display text-4xl md:text-5xl lg:text-6xl tracking-wider text-glow text-primary mb-4">
             The Twelve Zodiac Signs
           </h2>
-          <p className="text-muted-foreground max-w-xl mx-auto tracking-wide">
+          <p className="text-muted-foreground text-lg md:text-xl max-w-xl mx-auto tracking-wide">
             Explore the cosmic wisdom of each celestial sign
           </p>
         </div>
 
         {/* Main content - Left info + Right wheel */}
-        <div className="grid lg:grid-cols-2 gap-8 lg:gap-16 items-center min-h-[600px]">
+        <div className="grid lg:grid-cols-2 gap-8 lg:gap-16 items-center min-h-[550px]">
           {/* Left: Info Panel */}
           <div className="order-2 lg:order-1">
-            <div className="glass-card rounded-3xl p-8 md:p-10 min-h-[450px] flex flex-col justify-center relative overflow-hidden">
+            <div className="glass-card rounded-3xl p-8 md:p-10 min-h-[420px] flex flex-col justify-center relative overflow-hidden">
               {/* Decorative corners */}
               <div className="absolute top-4 left-4 w-6 h-6 border-l border-t border-primary/40" />
               <div className="absolute top-4 right-4 w-6 h-6 border-r border-t border-primary/40" />
@@ -204,8 +194,8 @@ export const ZodiacWheelSection = () => {
                 >
                   {/* Element badge */}
                   <div className="flex items-center gap-2 mb-4">
-                    <ElementIcon className={`w-4 h-4 ${elementColors[selectedSign.element]}`} />
-                    <span className={`text-sm uppercase tracking-[0.2em] ${elementColors[selectedSign.element]}`}>
+                    <ElementIcon className={`w-5 h-5 ${elementColors[selectedSign.element]}`} />
+                    <span className={`text-base uppercase tracking-[0.2em] ${elementColors[selectedSign.element]}`}>
                       {selectedSign.element} Element
                     </span>
                   </div>
@@ -230,12 +220,12 @@ export const ZodiacWheelSection = () => {
                   </div>
 
                   {/* Ruling planet */}
-                  <div className="text-sm text-muted-foreground mb-4">
+                  <div className="text-base text-muted-foreground mb-4">
                     Ruled by <span className="text-primary">{selectedSign.ruling}</span>
                   </div>
 
                   {/* Description */}
-                  <p className="text-foreground/90 leading-relaxed mb-6">
+                  <p className="text-foreground/90 text-base md:text-lg leading-relaxed mb-6">
                     {selectedSign.description}
                   </p>
 

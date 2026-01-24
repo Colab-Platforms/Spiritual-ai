@@ -269,11 +269,12 @@ const OrbitRing = ({ radius }: { radius: number }) => {
   );
 };
 
-// Mouse parallax camera controller
+// Mouse parallax camera controller with mobile-responsive zoom
 const CameraController = ({ scrollProgress }: { scrollProgress: number }) => {
-  const { camera } = useThree();
+  const { camera, size } = useThree();
   const mousePos = useRef({ x: 0, y: 0 });
   const targetPos = useRef({ x: 0, y: 0, z: 30 });
+  const isMobile = size.width < 768;
   
   useMemo(() => {
     const handleMouseMove = (e: MouseEvent) => {
@@ -285,10 +286,11 @@ const CameraController = ({ scrollProgress }: { scrollProgress: number }) => {
   }, []);
   
   useFrame(() => {
-    // Base position with scroll zoom
-    const baseZ = 30 - scrollProgress * 25;
-    targetPos.current.x = mousePos.current.x * 4;
-    targetPos.current.y = mousePos.current.y * 3 + 3;
+    // Adjust camera distance based on screen size - zoom out more on mobile
+    const mobileZoomOffset = isMobile ? 20 : 0;
+    const baseZ = 30 + mobileZoomOffset - scrollProgress * 25;
+    targetPos.current.x = isMobile ? 0 : mousePos.current.x * 4;
+    targetPos.current.y = (isMobile ? 0 : mousePos.current.y * 3) + 3;
     targetPos.current.z = baseZ;
     
     camera.position.x += (targetPos.current.x - camera.position.x) * 0.03;
@@ -462,9 +464,18 @@ export const SolarSystem = ({ scrollProgress }: SolarSystemProps) => {
   return (
     <Canvas
       camera={{ position: [0, 3, 30], fov: 55 }}
-      style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%' }}
+      style={{ 
+        position: 'absolute', 
+        top: 0, 
+        left: '50%', 
+        transform: 'translateX(-50%)',
+        width: '100%',
+        maxWidth: '100vw',
+        height: '100%',
+        overflow: 'hidden'
+      }}
       gl={{ antialias: true, alpha: true, powerPreference: 'high-performance' }}
-      dpr={[1, 2]}
+      dpr={[1, 1.5]}
     >
       <SolarSystemScene scrollProgress={scrollProgress} />
     </Canvas>
