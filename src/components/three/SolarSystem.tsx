@@ -49,38 +49,110 @@ const Sun = () => {
   );
 };
 
+// Procedural noise texture generator for realistic planet surfaces
+const useProceduralTexture = (
+  baseColor: string,
+  variationColor: string,
+  noiseScale: number = 4,
+  resolution: number = 256
+) => {
+  return useMemo(() => {
+    const canvas = document.createElement('canvas');
+    canvas.width = resolution;
+    canvas.height = resolution;
+    const ctx = canvas.getContext('2d')!;
+    
+    // Base color fill
+    ctx.fillStyle = baseColor;
+    ctx.fillRect(0, 0, resolution, resolution);
+    
+    // Add procedural noise pattern
+    const imageData = ctx.getImageData(0, 0, resolution, resolution);
+    const data = imageData.data;
+    
+    const baseRgb = hexToRgb(baseColor);
+    const varRgb = hexToRgb(variationColor);
+    
+    for (let y = 0; y < resolution; y++) {
+      for (let x = 0; x < resolution; x++) {
+        const i = (y * resolution + x) * 4;
+        
+        // Multiple octaves of noise for realistic look
+        const noise1 = Math.sin(x * noiseScale * 0.02) * Math.cos(y * noiseScale * 0.02);
+        const noise2 = Math.sin(x * noiseScale * 0.05 + 1.5) * Math.cos(y * noiseScale * 0.03);
+        const noise3 = Math.sin(x * noiseScale * 0.01) * Math.sin(y * noiseScale * 0.04 + 2.3);
+        const combinedNoise = (noise1 + noise2 * 0.5 + noise3 * 0.25) / 1.75;
+        
+        const blend = (combinedNoise + 1) * 0.5;
+        
+        data[i] = Math.floor(baseRgb.r + (varRgb.r - baseRgb.r) * blend);
+        data[i + 1] = Math.floor(baseRgb.g + (varRgb.g - baseRgb.g) * blend);
+        data[i + 2] = Math.floor(baseRgb.b + (varRgb.b - baseRgb.b) * blend);
+        data[i + 3] = 255;
+      }
+    }
+    
+    ctx.putImageData(imageData, 0, 0);
+    
+    const texture = new THREE.CanvasTexture(canvas);
+    texture.wrapS = THREE.RepeatWrapping;
+    texture.wrapT = THREE.RepeatWrapping;
+    return texture;
+  }, [baseColor, variationColor, noiseScale, resolution]);
+};
+
+// Helper to convert hex to RGB
+const hexToRgb = (hex: string) => {
+  const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+  return result ? {
+    r: parseInt(result[1], 16),
+    g: parseInt(result[2], 16),
+    b: parseInt(result[3], 16)
+  } : { r: 128, g: 128, b: 128 };
+};
+
 // Realistic planet component with procedural surface
 interface PlanetProps {
   radius: number;
   orbitRadius: number;
   speed: number;
-  color: string;
+  baseColor: string;
+  variationColor: string;
   emissive?: string;
   initialAngle?: number;
   hasRing?: boolean;
   ringColor?: string;
+  ringVariation?: string;
   hasAtmosphere?: boolean;
   atmosphereColor?: string;
   rotationSpeed?: number;
   tilt?: number;
+  noiseScale?: number;
 }
 
 const Planet = ({ 
   radius, 
   orbitRadius, 
   speed, 
-  color,
+  baseColor,
+  variationColor,
   emissive,
   initialAngle = 0, 
   hasRing,
   ringColor = '#d4a574',
+  ringVariation = '#8b7355',
   hasAtmosphere,
   atmosphereColor = '#88ccff',
   rotationSpeed = 0.01,
-  tilt = 0
+  tilt = 0,
+  noiseScale = 4
 }: PlanetProps) => {
   const planetRef = useRef<THREE.Group>(null);
   const meshRef = useRef<THREE.Mesh>(null);
+  
+  // Generate procedural texture
+  const texture = useProceduralTexture(baseColor, variationColor, noiseScale, 512);
+  const ringTexture = useProceduralTexture(ringColor, ringVariation, 8, 256);
   
   useFrame(({ clock }) => {
     if (planetRef.current) {
@@ -96,57 +168,74 @@ const Planet = ({
   return (
     <group ref={planetRef}>
       <group rotation={[tilt, 0, 0]}>
-        {/* Planet body */}
-        <Sphere ref={meshRef} args={[radius, 48, 48]}>
+        {/* Planet body with procedural texture */}
+        <Sphere ref={meshRef} args={[radius, 64, 64]}>
           <meshStandardMaterial 
-            color={color}
-            emissive={emissive || color}
-            emissiveIntensity={0.1}
-            roughness={0.8}
-            metalness={0.2}
+            map={texture}
+            emissive={emissive || baseColor}
+            emissiveIntensity={0.05}
+            roughness={0.85}
+            metalness={0.1}
           />
         </Sphere>
         
-        {/* Atmosphere glow */}
+        {/* Atmosphere layers */}
         {hasAtmosphere && (
           <>
-            <Sphere args={[radius * 1.05, 32, 32]}>
+            <Sphere args={[radius * 1.03, 48, 48]}>
               <meshBasicMaterial 
                 color={atmosphereColor} 
                 transparent 
-                opacity={0.15} 
+                opacity={0.2} 
                 side={THREE.BackSide}
               />
             </Sphere>
-            <Sphere args={[radius * 1.1, 32, 32]}>
+            <Sphere args={[radius * 1.08, 48, 48]}>
               <meshBasicMaterial 
                 color={atmosphereColor} 
                 transparent 
-                opacity={0.08} 
+                opacity={0.1} 
+                side={THREE.BackSide}
+              />
+            </Sphere>
+            <Sphere args={[radius * 1.15, 32, 32]}>
+              <meshBasicMaterial 
+                color={atmosphereColor} 
+                transparent 
+                opacity={0.05} 
                 side={THREE.BackSide}
               />
             </Sphere>
           </>
         )}
         
-        {/* Ring system */}
+        {/* Enhanced ring system with texture */}
         {hasRing && (
-          <group rotation={[Math.PI / 2.2, 0, 0]}>
+          <group rotation={[Math.PI / 2.3, 0.1, 0]}>
             <mesh>
-              <ringGeometry args={[radius * 1.4, radius * 1.8, 64]} />
+              <ringGeometry args={[radius * 1.3, radius * 1.6, 128]} />
               <meshBasicMaterial 
-                color={ringColor} 
+                map={ringTexture}
                 transparent 
-                opacity={0.6} 
+                opacity={0.7} 
                 side={THREE.DoubleSide} 
               />
             </mesh>
             <mesh>
-              <ringGeometry args={[radius * 1.85, radius * 2.2, 64]} />
+              <ringGeometry args={[radius * 1.65, radius * 1.9, 128]} />
               <meshBasicMaterial 
-                color={ringColor} 
+                color={ringColor}
                 transparent 
-                opacity={0.35} 
+                opacity={0.5} 
+                side={THREE.DoubleSide} 
+              />
+            </mesh>
+            <mesh>
+              <ringGeometry args={[radius * 1.95, radius * 2.3, 128]} />
+              <meshBasicMaterial 
+                color={ringVariation}
+                transparent 
+                opacity={0.3} 
                 side={THREE.DoubleSide} 
               />
             </mesh>
@@ -157,13 +246,26 @@ const Planet = ({
   );
 };
 
-// Orbit ring visualization
-const OrbitRing = ({ radius, opacity = 0.15 }: { radius: number; opacity?: number }) => {
+// Enhanced orbit ring with glow effect
+const OrbitRing = ({ radius }: { radius: number }) => {
   return (
-    <mesh rotation={[Math.PI / 2, 0, 0]}>
-      <ringGeometry args={[radius - 0.03, radius + 0.03, 128]} />
-      <meshBasicMaterial color="#f5c36a" transparent opacity={opacity} side={THREE.DoubleSide} />
-    </mesh>
+    <group rotation={[Math.PI / 2, 0, 0]}>
+      {/* Main visible orbit line */}
+      <mesh>
+        <ringGeometry args={[radius - 0.02, radius + 0.02, 256]} />
+        <meshBasicMaterial color="#f5c36a" transparent opacity={0.5} side={THREE.DoubleSide} />
+      </mesh>
+      {/* Inner glow */}
+      <mesh>
+        <ringGeometry args={[radius - 0.08, radius + 0.08, 256]} />
+        <meshBasicMaterial color="#f5c36a" transparent opacity={0.2} side={THREE.DoubleSide} />
+      </mesh>
+      {/* Outer glow */}
+      <mesh>
+        <ringGeometry args={[radius - 0.15, radius + 0.15, 256]} />
+        <meshBasicMaterial color="#d4a855" transparent opacity={0.08} side={THREE.DoubleSide} />
+      </mesh>
+    </group>
   );
 };
 
@@ -271,75 +373,86 @@ export const SolarSystemScene = ({ scrollProgress }: SolarSystemProps) => {
       {/* Sun */}
       <Sun />
       
-      {/* Orbit rings */}
-      <OrbitRing radius={5} opacity={0.12} />
-      <OrbitRing radius={7.5} opacity={0.1} />
-      <OrbitRing radius={11} opacity={0.1} />
-      <OrbitRing radius={15} opacity={0.08} />
-      <OrbitRing radius={20} opacity={0.06} />
+      {/* Orbit rings - now clearly visible */}
+      <OrbitRing radius={5} />
+      <OrbitRing radius={7.5} />
+      <OrbitRing radius={11} />
+      <OrbitRing radius={15} />
+      <OrbitRing radius={20} />
       
-      {/* Mercury - small, gray/brown, close to sun */}
+      {/* Mercury - cratered gray/brown surface */}
       <Planet 
         radius={0.25} 
         orbitRadius={5} 
         speed={0.9} 
-        color="#8c7853"
-        emissive="#5a4a3a"
+        baseColor="#8c7853"
+        variationColor="#5a4a3a"
+        emissive="#3a3025"
         initialAngle={0.5}
         rotationSpeed={0.002}
+        noiseScale={8}
       />
       
-      {/* Venus - yellowish, thick atmosphere appearance */}
+      {/* Venus - yellowish with thick swirling atmosphere */}
       <Planet 
         radius={0.45} 
         orbitRadius={7.5} 
         speed={0.6} 
-        color="#e6c87a"
-        emissive="#d4a855"
+        baseColor="#e6c87a"
+        variationColor="#c9a050"
+        emissive="#8b7530"
         initialAngle={2.1}
         hasAtmosphere
         atmosphereColor="#ffe4a0"
         rotationSpeed={0.001}
+        noiseScale={3}
       />
       
-      {/* Earth - blue with atmosphere */}
+      {/* Earth - blue oceans with green/brown continents */}
       <Planet 
         radius={0.5} 
         orbitRadius={11} 
         speed={0.4} 
-        color="#4a7fb5"
-        emissive="#2d5a87"
+        baseColor="#4a7fb5"
+        variationColor="#3d6545"
+        emissive="#1a3550"
         initialAngle={4.2}
         hasAtmosphere
         atmosphereColor="#88ccff"
         rotationSpeed={0.008}
         tilt={0.41}
+        noiseScale={5}
       />
       
-      {/* Mars - red/orange, smaller */}
+      {/* Mars - red/orange with darker regions */}
       <Planet 
         radius={0.35} 
         orbitRadius={15} 
         speed={0.25} 
-        color="#c45c3a"
-        emissive="#8b3a20"
+        baseColor="#c45c3a"
+        variationColor="#8b3a20"
+        emissive="#4a1a10"
         initialAngle={1.3}
         rotationSpeed={0.007}
         tilt={0.44}
+        noiseScale={6}
       />
       
-      {/* Saturn-like - with prominent rings */}
+      {/* Saturn-like - banded gas giant with rings */}
       <Planet 
         radius={1.1} 
         orbitRadius={20} 
         speed={0.12} 
-        color="#e4c88c"
-        emissive="#c4a060"
+        baseColor="#e4c88c"
+        variationColor="#c4a060"
+        emissive="#6b5530"
         initialAngle={3.7}
         hasRing
         ringColor="#d4b896"
+        ringVariation="#8b7355"
         rotationSpeed={0.012}
         tilt={0.47}
+        noiseScale={2}
       />
     </>
   );
