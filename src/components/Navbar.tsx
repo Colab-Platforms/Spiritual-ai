@@ -5,7 +5,7 @@ import gsap from 'gsap';
 
 const navLinks = [
   { name: 'Home', path: '/' },
-  { name: 'Daily Horoscopes', path: '/horoscopes' },
+  // { name: 'Daily Horoscopes', path: '/horoscopes' }, // Hidden for now
   { name: 'Zodiac Signs', path: '/zodiac' },
   { name: 'Compatibility', path: '/compatibility' },
   { name: 'Birth Chart', path: '/birth-chart' },
