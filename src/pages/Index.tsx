@@ -110,14 +110,14 @@ const Index = () => {
         <ScrollytellingHero />
       </Suspense>
 
-      {/* How It Works Section */}
-      <section ref={featuresRef} className="relative z-10 py-24 bg-background">
+      {/* How It Works Section - Reduced spacing & transparent */}
+      <section ref={featuresRef} className="relative z-10 py-16 bg-transparent">
         <div className="container mx-auto px-4">
-          <div className="text-center mb-16">
-            <h2 className="font-display text-3xl md:text-4xl tracking-wider text-glow text-primary mb-4">
+          <div className="text-center mb-12">
+            <h2 className="font-display text-4xl md:text-5xl tracking-wider text-glow text-primary mb-4">
               How It Works
             </h2>
-            <p className="text-muted-foreground max-w-xl mx-auto tracking-wide">
+            <p className="text-muted-foreground text-lg max-w-xl mx-auto tracking-wide">
               Your journey to cosmic enlightenment in four simple steps
             </p>
           </div>
@@ -134,22 +134,22 @@ const Index = () => {
                 <div className="w-14 h-14 mx-auto mb-5 rounded-xl border border-primary/30 flex items-center justify-center bg-primary/5">
                   <item.icon className="w-7 h-7 text-primary" />
                 </div>
-                <h3 className="font-display text-lg tracking-wider text-foreground mb-2">{item.title}</h3>
-                <p className="text-sm text-muted-foreground">{item.description}</p>
+                <h3 className="font-display text-xl tracking-wider text-foreground mb-2">{item.title}</h3>
+                <p className="text-base text-muted-foreground">{item.description}</p>
               </div>
             ))}
           </div>
         </div>
       </section>
 
-      {/* What We Offer Section */}
-      <section ref={offerRef} className="relative z-10 py-24 bg-background">
+      {/* What We Offer Section - Reduced spacing & transparent */}
+      <section ref={offerRef} className="relative z-10 py-16 bg-transparent">
         <div className="container mx-auto px-4">
-          <div className="text-center mb-16">
-            <h2 className="font-display text-3xl md:text-4xl tracking-wider text-glow text-primary mb-4">
+          <div className="text-center mb-12">
+            <h2 className="font-display text-4xl md:text-5xl tracking-wider text-glow text-primary mb-4">
               What We Offer
             </h2>
-            <p className="text-muted-foreground max-w-xl mx-auto tracking-wide">
+            <p className="text-muted-foreground text-lg max-w-xl mx-auto tracking-wide">
               Comprehensive cosmic guidance for every aspect of your life
             </p>
           </div>
@@ -166,7 +166,7 @@ const Index = () => {
                 <h3 className="font-display text-xl tracking-wider text-foreground mb-2 group-hover:text-primary transition-colors">
                   {item.title}
                 </h3>
-                <p className="text-sm text-muted-foreground">{item.description}</p>
+                <p className="text-base text-muted-foreground">{item.description}</p>
               </div>
             ))}
           </div>
@@ -176,20 +176,20 @@ const Index = () => {
       {/* Interactive Zodiac Wheel Section */}
       <ZodiacWheelSection />
 
-      {/* Why Trust Section */}
-      <section ref={trustRef} className="relative z-10 py-24 bg-background">
+      {/* Why Trust Section - Reduced spacing & transparent */}
+      <section ref={trustRef} className="relative z-10 py-16 bg-transparent">
         <div className="container mx-auto px-4">
           <div className="glass-card rounded-3xl p-8 md:p-12">
             <div className="grid lg:grid-cols-2 gap-12 items-center">
               <div>
                 <div className="inline-flex items-center gap-2 text-primary mb-4">
                   <Shield className="w-5 h-5" />
-                  <span className="text-sm uppercase tracking-[0.2em]">Trust & Accuracy</span>
+                  <span className="text-base uppercase tracking-[0.2em]">Trust & Accuracy</span>
                 </div>
-                <h2 className="font-display text-3xl md:text-4xl tracking-wider text-foreground mb-6">
+                <h2 className="font-display text-4xl md:text-5xl tracking-wider text-foreground mb-6">
                   Why Trust Our Astrology
                 </h2>
-                <p className="text-muted-foreground leading-relaxed mb-8">
+                <p className="text-lg text-muted-foreground leading-relaxed mb-8">
                   Our readings combine ancient astrological wisdom with modern psychological insights, 
                   providing you with accurate, meaningful guidance for your journey through life.
                 </p>
@@ -210,8 +210,8 @@ const Index = () => {
                   >
                     <div className="w-2 h-2 mt-2 rounded-full bg-primary flex-shrink-0" />
                     <div>
-                      <h4 className="font-display text-lg tracking-wider text-foreground mb-1">{reason.title}</h4>
-                      <p className="text-sm text-muted-foreground">{reason.description}</p>
+                      <h4 className="font-display text-xl tracking-wider text-foreground mb-1">{reason.title}</h4>
+                      <p className="text-base text-muted-foreground">{reason.description}</p>
                     </div>
                   </div>
                 ))}
@@ -221,8 +221,8 @@ const Index = () => {
         </div>
       </section>
 
-      {/* Newsletter CTA Section */}
-      <section className="relative z-10 py-24 bg-background">
+      {/* Newsletter CTA Section - Reduced spacing & transparent */}
+      <section className="relative z-10 py-16 bg-transparent">
         <div className="container mx-auto px-4">
           <div className="glass-card rounded-3xl p-8 md:p-12 text-center max-w-3xl mx-auto relative overflow-hidden">
             {/* Decorative corners */}
@@ -232,10 +232,10 @@ const Index = () => {
             <div className="absolute bottom-4 right-4 w-8 h-8 border-r-2 border-b-2 border-primary/30" />
             
             <Sparkles className="w-10 h-10 text-primary mx-auto mb-6" />
-            <h2 className="font-display text-2xl md:text-3xl tracking-wider text-foreground mb-4">
+            <h2 className="font-display text-3xl md:text-4xl tracking-wider text-foreground mb-4">
               Receive Daily Cosmic Wisdom
             </h2>
-            <p className="text-muted-foreground mb-8 max-w-md mx-auto">
+            <p className="text-lg text-muted-foreground mb-8 max-w-md mx-auto">
               Subscribe to get personalized horoscopes and celestial insights delivered to your inbox.
             </p>
             <NewsletterForm />
