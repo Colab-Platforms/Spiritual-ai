@@ -3,9 +3,8 @@ import { Link } from 'react-router-dom';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { ArrowRight, Sparkles, Eye, Heart, Briefcase, Calendar, User, Shield, Star, Zap } from 'lucide-react';
-import { zodiacSigns } from '@/data/zodiacData';
-import ZodiacCard from '@/components/ZodiacCard';
 import NewsletterForm from '@/components/NewsletterForm';
+import ZodiacWheelSection from '@/components/ZodiacWheelSection';
 
 // Lazy load the 3D scrollytelling hero for better initial load
 const ScrollytellingHero = lazy(() => import('@/components/three/ScrollytellingHero'));
@@ -174,37 +173,8 @@ const Index = () => {
         </div>
       </section>
 
-      {/* Zodiac Signs Grid */}
-      <section className="relative z-10 py-24 bg-background">
-        <div className="container mx-auto px-4">
-          <div className="text-center mb-16">
-            <h2 className="font-display text-3xl md:text-4xl tracking-wider text-glow text-primary mb-4">
-              The Twelve Signs
-            </h2>
-            <p className="text-muted-foreground max-w-xl mx-auto tracking-wide">
-              Each zodiac sign holds unique energies and cosmic wisdom
-            </p>
-          </div>
-
-          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6">
-            {zodiacSigns.slice(0, 8).map((sign, index) => (
-              <div key={sign.name} className="zodiac-preview-card">
-                <ZodiacCard sign={sign} index={index} compact />
-              </div>
-            ))}
-          </div>
-
-          <div className="text-center mt-10">
-            <Link 
-              to="/zodiac" 
-              className="btn-outline-cosmic px-8 py-3 rounded-lg inline-flex items-center gap-2"
-            >
-              View All Signs
-              <ArrowRight className="w-4 h-4" />
-            </Link>
-          </div>
-        </div>
-      </section>
+      {/* Interactive Zodiac Wheel Section */}
+      <ZodiacWheelSection />
 
       {/* Why Trust Section */}
       <section ref={trustRef} className="relative z-10 py-24 bg-background">
