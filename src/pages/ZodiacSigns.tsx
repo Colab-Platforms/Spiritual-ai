@@ -4,118 +4,68 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { zodiacSigns } from '@/data/zodiacData';
 import ZodiacCard from '@/components/ZodiacCard';
 
-// Import zodiac line-art images
-import ariesImg from '@/assets/zodiac/aries.png';
-import taurusImg from '@/assets/zodiac/taurus.png';
-import geminiImg from '@/assets/zodiac/gemini.png';
-import cancerImg from '@/assets/zodiac/cancer.png';
-import leoImg from '@/assets/zodiac/leo.png';
-import virgoImg from '@/assets/zodiac/virgo.png';
-import libraImg from '@/assets/zodiac/libra.png';
-import scorpioImg from '@/assets/zodiac/scorpio.png';
-import sagittariusImg from '@/assets/zodiac/sagittarius.png';
-import capricornImg from '@/assets/zodiac/capricorn.png';
-import aquariusImg from '@/assets/zodiac/aquarius.png';
-import piscesImg from '@/assets/zodiac/pisces.png';
-
 gsap.registerPlugin(ScrollTrigger);
 
-// Zodiac images mapping
-const zodiacImages: Record<string, string> = {
-  Aries: ariesImg,
-  Taurus: taurusImg,
-  Gemini: geminiImg,
-  Cancer: cancerImg,
-  Leo: leoImg,
-  Virgo: virgoImg,
-  Libra: libraImg,
-  Scorpio: scorpioImg,
-  Sagittarius: sagittariusImg,
-  Capricorn: capricornImg,
-  Aquarius: aquariusImg,
-  Pisces: piscesImg,
-};
-
-// Zodiac wheel component with real icons
+// Zodiac wheel component
 const ZodiacWheel = () => {
-  const WHEEL_SIZE = 320;
-  const ICON_RADIUS = 120;
-
+  const signs = zodiacSigns.map(s => ({ name: s.name, symbol: s.symbol }));
+  
   return (
-    <div className="relative mx-auto" style={{ width: WHEEL_SIZE, height: WHEEL_SIZE }}>
-      <svg 
-        viewBox={`-${WHEEL_SIZE/2} -${WHEEL_SIZE/2} ${WHEEL_SIZE} ${WHEEL_SIZE}`}
-        className="w-full h-full"
-      >
-        {/* SVG glow filter */}
-        <defs>
-          <filter id="wheelGlow" x="-50%" y="-50%" width="200%" height="200%">
-            <feGaussianBlur stdDeviation="3" result="coloredBlur"/>
-            <feMerge>
-              <feMergeNode in="coloredBlur"/>
-              <feMergeNode in="SourceGraphic"/>
-            </feMerge>
-          </filter>
-        </defs>
-
-        {/* Outer ring */}
-        <circle cx="0" cy="0" r="150" fill="none" stroke="hsl(40 85% 65% / 0.2)" strokeWidth="1.5" />
+    <div className="relative w-56 h-56 md:w-72 md:h-72 mx-auto">
+      {/* Outer ring */}
+      <div className="absolute inset-0 rounded-full border border-primary/30" />
+      
+      {/* Inner rings */}
+      <div className="absolute inset-8 rounded-full border border-primary/20" />
+      <div className="absolute inset-16 rounded-full border border-primary/10" />
+      
+      {/* Center star pattern */}
+      <div className="absolute inset-0 flex items-center justify-center">
+        <svg viewBox="0 0 100 100" className="w-16 h-16 text-primary/40">
+          <polygon points="50,5 61,40 98,40 68,62 79,97 50,75 21,97 32,62 2,40 39,40" fill="none" stroke="currentColor" strokeWidth="0.5"/>
+        </svg>
+      </div>
+      
+      {/* Zodiac symbols around the wheel */}
+      {signs.map((sign, i) => {
+        const angle = (i * 30 - 90) * (Math.PI / 180);
+        const radius = 42; // percentage from center
+        const x = 50 + radius * Math.cos(angle);
+        const y = 50 + radius * Math.sin(angle);
         
-        {/* Inner rings */}
-        <circle cx="0" cy="0" r={ICON_RADIUS + 8} fill="none" stroke="hsl(40 85% 65% / 0.25)" strokeWidth="1.5" filter="url(#wheelGlow)" />
-        <circle cx="0" cy="0" r="80" fill="none" stroke="hsl(40 85% 65% / 0.15)" strokeWidth="1" />
-        <circle cx="0" cy="0" r="50" fill="none" stroke="hsl(40 85% 65% / 0.1)" strokeWidth="1" strokeDasharray="3 6" />
-        
-        {/* Division lines */}
-        {Array.from({ length: 12 }).map((_, i) => {
+        return (
+          <div
+            key={sign.name}
+            className="absolute text-primary text-lg md:text-xl transition-all duration-300 hover:scale-125 cursor-pointer"
+            style={{
+              left: `${x}%`,
+              top: `${y}%`,
+              transform: 'translate(-50%, -50%)',
+              textShadow: '0 0 10px rgba(245,195,106,0.5)'
+            }}
+            title={sign.name}
+          >
+            {sign.symbol}
+          </div>
+        );
+      })}
+      
+      {/* Decorative lines connecting to center */}
+      <svg className="absolute inset-0 w-full h-full" viewBox="0 0 100 100">
+        {[...Array(12)].map((_, i) => {
           const angle = (i * 30 - 90) * (Math.PI / 180);
-          const innerR = 40;
-          const outerR = ICON_RADIUS - 8;
+          const x2 = 50 + 30 * Math.cos(angle);
+          const y2 = 50 + 30 * Math.sin(angle);
           return (
             <line
-              key={`div-${i}`}
-              x1={Math.cos(angle) * innerR}
-              y1={Math.sin(angle) * innerR}
-              x2={Math.cos(angle) * outerR}
-              y2={Math.sin(angle) * outerR}
-              stroke="hsl(40 85% 65% / 0.1)"
-              strokeWidth="1"
+              key={i}
+              x1="50"
+              y1="50"
+              x2={x2}
+              y2={y2}
+              stroke="rgba(232,175,93,0.15)"
+              strokeWidth="0.5"
             />
-          );
-        })}
-
-        {/* Center star pattern */}
-        <g filter="url(#wheelGlow)">
-          <circle cx="0" cy="0" r="20" fill="hsl(40 85% 65% / 0.08)" />
-          <polygon 
-            points="0,-15 4,-5 15,-5 6,2 10,13 0,6 -10,13 -6,2 -15,-5 -4,-5" 
-            fill="none" 
-            stroke="hsl(40 85% 65% / 0.4)" 
-            strokeWidth="0.8"
-          />
-        </g>
-
-        {/* Zodiac icons around the wheel */}
-        {zodiacSigns.map((sign, i) => {
-          const angle = (i * 30 - 90) * (Math.PI / 180);
-          const x = Math.cos(angle) * ICON_RADIUS;
-          const y = Math.sin(angle) * ICON_RADIUS;
-          
-          return (
-            <g key={sign.name} transform={`translate(${x}, ${y})`}>
-              <image
-                href={zodiacImages[sign.name]}
-                x="-18"
-                y="-18"
-                width="36"
-                height="36"
-                className="transition-all duration-300 hover:opacity-100 cursor-pointer"
-                style={{ 
-                  filter: 'drop-shadow(0 0 6px rgba(245, 195, 106, 0.5))',
-                  opacity: 0.85,
-                }}
-              />
-            </g>
           );
         })}
       </svg>
@@ -166,19 +116,16 @@ const ZodiacSigns = () => {
 
   return (
     <div ref={pageRef} className="min-h-screen pt-24 pb-12 relative z-10">
-      {/* Glassmorphism background */}
-      <div className="absolute inset-0 bg-background/30 backdrop-blur-sm" />
-      
-      <div className="container mx-auto px-4 relative">
+      <div className="container mx-auto px-4">
         {/* Header with Zodiac Wheel */}
         <div className="text-center mb-16">
           <div ref={wheelRef} className="mb-8">
             <ZodiacWheel />
           </div>
-          <h1 className="page-title font-display text-5xl md:text-6xl lg:text-7xl text-glow text-primary mb-4">
+          <h1 className="page-title font-display text-4xl md:text-5xl lg:text-6xl text-glow text-primary mb-4">
             The Twelve Zodiac Signs
           </h1>
-          <p className="text-muted-foreground text-lg max-w-2xl mx-auto">
+          <p className="text-muted-foreground max-w-2xl mx-auto">
             Explore the unique characteristics, traits, and cosmic energies of each zodiac sign in the celestial wheel
           </p>
         </div>
@@ -193,13 +140,13 @@ const ZodiacSigns = () => {
           ].map((element) => (
             <div 
               key={element.name} 
-              className="flex items-center gap-2 px-5 py-2.5 rounded-full border border-primary/20 bg-card/40 backdrop-blur-sm"
+              className="flex items-center gap-2 px-4 py-2 rounded-full border border-primary/20 bg-card"
             >
               <div 
-                className="w-2.5 h-2.5 rounded-full"
-                style={{ backgroundColor: element.color, boxShadow: `0 0 10px ${element.color}` }}
+                className="w-2 h-2 rounded-full"
+                style={{ backgroundColor: element.color, boxShadow: `0 0 8px ${element.color}` }}
               />
-              <span className="text-base text-muted-foreground">{element.name}</span>
+              <span className="text-sm text-muted-foreground">{element.name}</span>
             </div>
           ))}
         </div>

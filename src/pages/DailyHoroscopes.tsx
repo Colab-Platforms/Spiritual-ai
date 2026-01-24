@@ -4,36 +4,7 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { ChevronDown, Heart, Briefcase, Activity, Sparkles } from 'lucide-react';
 import { zodiacSigns } from '@/data/zodiacData';
 
-// Import zodiac images for visual display
-import ariesImg from '@/assets/zodiac/aries.png';
-import taurusImg from '@/assets/zodiac/taurus.png';
-import geminiImg from '@/assets/zodiac/gemini.png';
-import cancerImg from '@/assets/zodiac/cancer.png';
-import leoImg from '@/assets/zodiac/leo.png';
-import virgoImg from '@/assets/zodiac/virgo.png';
-import libraImg from '@/assets/zodiac/libra.png';
-import scorpioImg from '@/assets/zodiac/scorpio.png';
-import sagittariusImg from '@/assets/zodiac/sagittarius.png';
-import capricornImg from '@/assets/zodiac/capricorn.png';
-import aquariusImg from '@/assets/zodiac/aquarius.png';
-import piscesImg from '@/assets/zodiac/pisces.png';
-
 gsap.registerPlugin(ScrollTrigger);
-
-const zodiacImages: Record<string, string> = {
-  aries: ariesImg,
-  taurus: taurusImg,
-  gemini: geminiImg,
-  cancer: cancerImg,
-  leo: leoImg,
-  virgo: virgoImg,
-  libra: libraImg,
-  scorpio: scorpioImg,
-  sagittarius: sagittariusImg,
-  capricorn: capricornImg,
-  aquarius: aquariusImg,
-  pisces: piscesImg,
-};
 
 const horoscopeReadings: Record<string, { love: string; career: string; health: string; lucky: number[] }> = {
   aries: {
@@ -155,23 +126,13 @@ const DailyHoroscopes = () => {
 
   return (
     <div ref={pageRef} className="min-h-screen pt-24 pb-12 relative z-10">
-      {/* Glassmorphism cosmic background */}
-      <div className="absolute inset-0 bg-background/30 backdrop-blur-sm" />
-      
-      {/* Cosmic decorative elements */}
-      <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        <div className="absolute top-20 left-10 w-64 h-64 bg-primary/5 rounded-full blur-[100px]" />
-        <div className="absolute top-40 right-20 w-80 h-80 bg-primary/8 rounded-full blur-[120px]" />
-        <div className="absolute bottom-20 left-1/3 w-72 h-72 bg-primary/5 rounded-full blur-[100px]" />
-      </div>
-      
-      <div className="container mx-auto px-4 relative">
+      <div className="container mx-auto px-4">
         {/* Header */}
         <div className="text-center mb-12">
-          <h1 className="page-title font-display text-5xl md:text-6xl lg:text-7xl text-glow text-primary mb-4">
+          <h1 className="page-title font-display text-4xl md:text-5xl lg:text-6xl text-glow text-primary mb-4">
             Daily Horoscopes
           </h1>
-          <p className="text-muted-foreground text-lg max-w-2xl mx-auto">
+          <p className="text-muted-foreground max-w-2xl mx-auto">
             Select your zodiac sign to receive your personalized celestial guidance for today
           </p>
         </div>
@@ -181,29 +142,26 @@ const DailyHoroscopes = () => {
           <div className="relative">
             <button
               onClick={() => setIsDropdownOpen(!isDropdownOpen)}
-              className="w-full glass-card bg-card/40 backdrop-blur-xl p-4 rounded-xl flex items-center justify-between text-left border-primary/20"
+              className="w-full glass-card p-4 rounded-xl flex items-center justify-between text-left"
             >
               {selectedZodiac ? (
-                <div className="flex items-center gap-4">
-                  <img 
-                    src={zodiacImages[selectedSign!]} 
-                    alt={selectedZodiac.name}
-                    className="w-12 h-12 object-contain"
-                    style={{ filter: 'drop-shadow(0 0 8px rgba(245, 195, 106, 0.5))' }}
-                  />
+                <div className="flex items-center gap-3">
+                  <span className="text-3xl" style={{ textShadow: `0 0 20px ${selectedZodiac.color}` }}>
+                    {selectedZodiac.symbol}
+                  </span>
                   <div>
-                    <div className="font-display text-xl text-foreground">{selectedZodiac.name}</div>
-                    <div className="text-base text-muted-foreground">{selectedZodiac.dates}</div>
+                    <div className="font-display text-foreground">{selectedZodiac.name}</div>
+                    <div className="text-sm text-muted-foreground">{selectedZodiac.dates}</div>
                   </div>
                 </div>
               ) : (
-                <span className="text-muted-foreground text-lg">Choose your zodiac sign...</span>
+                <span className="text-muted-foreground">Choose your zodiac sign...</span>
               )}
-              <ChevronDown className={`w-6 h-6 text-muted-foreground transition-transform ${isDropdownOpen ? 'rotate-180' : ''}`} />
+              <ChevronDown className={`w-5 h-5 text-muted-foreground transition-transform ${isDropdownOpen ? 'rotate-180' : ''}`} />
             </button>
 
             {isDropdownOpen && (
-              <div className="absolute top-full left-0 right-0 mt-2 glass-card bg-card/60 backdrop-blur-xl rounded-xl overflow-hidden z-20 max-h-80 overflow-y-auto border-primary/20">
+              <div className="absolute top-full left-0 right-0 mt-2 glass-card rounded-xl overflow-hidden z-20 max-h-80 overflow-y-auto">
                 {zodiacSigns.map((sign) => (
                   <button
                     key={sign.name}
@@ -211,19 +169,14 @@ const DailyHoroscopes = () => {
                       setSelectedSign(sign.name.toLowerCase());
                       setIsDropdownOpen(false);
                     }}
-                    className={`w-full p-4 flex items-center gap-4 hover:bg-primary/10 transition-colors ${
-                      selectedSign === sign.name.toLowerCase() ? 'bg-primary/15' : ''
+                    className={`w-full p-3 flex items-center gap-3 hover:bg-primary/10 transition-colors ${
+                      selectedSign === sign.name.toLowerCase() ? 'bg-primary/10' : ''
                     }`}
                   >
-                    <img 
-                      src={zodiacImages[sign.name.toLowerCase()]} 
-                      alt={sign.name}
-                      className="w-10 h-10 object-contain"
-                      style={{ filter: 'drop-shadow(0 0 6px rgba(245, 195, 106, 0.4))' }}
-                    />
+                    <span className="text-2xl">{sign.symbol}</span>
                     <div className="text-left">
-                      <div className="font-display text-base text-foreground">{sign.name}</div>
-                      <div className="text-sm text-muted-foreground">{sign.dates}</div>
+                      <div className="font-display text-sm text-foreground">{sign.name}</div>
+                      <div className="text-xs text-muted-foreground">{sign.dates}</div>
                     </div>
                   </button>
                 ))}
@@ -237,27 +190,25 @@ const DailyHoroscopes = () => {
           <div ref={readingRef} className="max-w-4xl mx-auto">
             {/* Sign Header */}
             <div className="text-center mb-10">
-              <div className="flex justify-center mb-4">
-                <img 
-                  src={zodiacImages[selectedSign]} 
-                  alt={selectedZodiac.name}
-                  className="w-24 h-24 object-contain"
-                  style={{ filter: 'drop-shadow(0 0 20px rgba(245, 195, 106, 0.6))' }}
-                />
+              <div 
+                className="text-7xl mb-4"
+                style={{ textShadow: `0 0 40px ${selectedZodiac.color}` }}
+              >
+                {selectedZodiac.symbol}
               </div>
-              <h2 className="font-display text-4xl text-foreground mb-2">{selectedZodiac.name}</h2>
-              <p className="text-muted-foreground text-lg">{new Date().toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })}</p>
+              <h2 className="font-display text-3xl text-foreground mb-2">{selectedZodiac.name}</h2>
+              <p className="text-muted-foreground">{new Date().toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })}</p>
             </div>
 
             {/* Categories */}
             <div className="grid md:grid-cols-3 gap-6 mb-10">
               {categories.map((cat) => (
-                <div key={cat.key} className="glass-card bg-card/40 backdrop-blur-xl rounded-2xl p-6 border-primary/10">
+                <div key={cat.key} className="glass-card rounded-2xl p-6">
                   <div className="flex items-center gap-3 mb-4">
-                    <cat.icon className={`w-7 h-7 ${cat.color}`} />
-                    <h3 className="font-display text-xl text-foreground">{cat.title}</h3>
+                    <cat.icon className={`w-6 h-6 ${cat.color}`} />
+                    <h3 className="font-display text-lg text-foreground">{cat.title}</h3>
                   </div>
-                  <p className="text-muted-foreground text-base leading-relaxed">
+                  <p className="text-muted-foreground text-sm leading-relaxed">
                     {reading[cat.key as keyof typeof reading]}
                   </p>
                 </div>
@@ -265,16 +216,16 @@ const DailyHoroscopes = () => {
             </div>
 
             {/* Lucky Numbers */}
-            <div className="glass-card bg-card/40 backdrop-blur-xl rounded-2xl p-8 text-center border-primary/10">
+            <div className="glass-card rounded-2xl p-6 text-center">
               <div className="flex items-center justify-center gap-2 mb-4">
-                <Sparkles className="w-6 h-6 text-primary" />
-                <h3 className="font-display text-xl text-foreground">Lucky Numbers</h3>
+                <Sparkles className="w-5 h-5 text-primary" />
+                <h3 className="font-display text-lg text-foreground">Lucky Numbers</h3>
               </div>
-              <div className="flex justify-center gap-4 flex-wrap">
+              <div className="flex justify-center gap-3 flex-wrap">
                 {reading.lucky.map((num, index) => (
                   <div 
                     key={index}
-                    className="w-14 h-14 rounded-full bg-primary/20 flex items-center justify-center font-display text-primary text-xl border border-primary/30"
+                    className="w-12 h-12 rounded-full bg-primary/20 flex items-center justify-center font-display text-primary text-lg"
                   >
                     {num}
                   </div>
@@ -287,8 +238,8 @@ const DailyHoroscopes = () => {
         {/* Prompt to select */}
         {!selectedSign && (
           <div className="text-center py-20">
-            <div className="text-7xl mb-6 opacity-30">✨</div>
-            <p className="text-muted-foreground text-lg">Select your zodiac sign above to reveal today's cosmic guidance</p>
+            <div className="text-6xl mb-6 opacity-30">✨</div>
+            <p className="text-muted-foreground">Select your zodiac sign above to reveal today's cosmic guidance</p>
           </div>
         )}
       </div>
