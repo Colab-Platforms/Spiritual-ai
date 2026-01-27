@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
-import { motion, useScroll, useTransform, useSpring } from 'framer-motion';
+import { motion, useScroll, useTransform, useSpring, AnimatePresence } from 'framer-motion';
 
 interface Constellation {
   id: string;
@@ -7,9 +7,14 @@ interface Constellation {
   stars: { x: number; y: number; size: number }[];
   lines: [number, number][];
   triggerProgress: number;
+  mythology: {
+    origin: string;
+    meaning: string;
+    keyStars: string[];
+  };
 }
 
-// Constellation patterns that appear at different scroll positions
+// Constellation patterns with mythology data
 const constellations: Constellation[] = [
   {
     id: 'orion',
@@ -26,6 +31,11 @@ const constellations: Constellation[] = [
     ],
     lines: [[0, 1], [1, 2], [2, 0], [3, 4], [4, 5], [1, 4], [3, 6], [5, 7]],
     triggerProgress: 0.15,
+    mythology: {
+      origin: 'Greek mythology tells of Orion, a giant huntsman placed among the stars by Zeus.',
+      meaning: 'Represents strength, pursuit, and the eternal hunt. Those born under Orion are said to possess unwavering determination.',
+      keyStars: ['Betelgeuse', 'Rigel', 'Bellatrix'],
+    },
   },
   {
     id: 'cassiopeia',
@@ -39,6 +49,11 @@ const constellations: Constellation[] = [
     ],
     lines: [[0, 1], [1, 2], [2, 3], [3, 4]],
     triggerProgress: 0.3,
+    mythology: {
+      origin: 'Named after the vain queen Cassiopeia who boasted of her beauty, angering Poseidon.',
+      meaning: 'Symbolizes beauty, pride, and the consequences of vanity. A reminder that true beauty comes from within.',
+      keyStars: ['Schedar', 'Caph', 'Ruchbah'],
+    },
   },
   {
     id: 'leo',
@@ -53,6 +68,11 @@ const constellations: Constellation[] = [
     ],
     lines: [[0, 1], [1, 2], [0, 3], [3, 4], [4, 5]],
     triggerProgress: 0.45,
+    mythology: {
+      origin: 'The Nemean Lion slain by Hercules as his first labor, immortalized in the stars.',
+      meaning: 'Embodies courage, royalty, and fierce protection. Leos are natural leaders with hearts of gold.',
+      keyStars: ['Regulus', 'Denebola', 'Algieba'],
+    },
   },
   {
     id: 'scorpius',
@@ -68,6 +88,11 @@ const constellations: Constellation[] = [
     ],
     lines: [[0, 1], [1, 2], [2, 3], [3, 4], [4, 5], [5, 6]],
     triggerProgress: 0.6,
+    mythology: {
+      origin: 'The scorpion sent by Gaia to defeat Orion, forever chasing him across the night sky.',
+      meaning: 'Represents transformation, passion, and hidden depths. Scorpios possess intense emotional wisdom.',
+      keyStars: ['Antares', 'Shaula', 'Sargas'],
+    },
   },
 ];
 
@@ -83,6 +108,8 @@ interface ShootingStar {
 const ScrollStorytelling = () => {
   const containerRef = useRef<HTMLDivElement>(null);
   const [shootingStars, setShootingStars] = useState<ShootingStar[]>([]);
+  const [hoveredConstellation, setHoveredConstellation] = useState<Constellation | null>(null);
+  const [tooltipPosition, setTooltipPosition] = useState({ x: 0, y: 0 });
   const shootingStarIdRef = useRef(0);
   
   const { scrollYProgress } = useScroll();
@@ -113,16 +140,28 @@ const ScrollStorytelling = () => {
     return () => clearInterval(interval);
   }, []);
 
+  const handleConstellationHover = (constellation: Constellation | null, event?: React.MouseEvent) => {
+    setHoveredConstellation(constellation);
+    if (event && constellation) {
+      const rect = containerRef.current?.getBoundingClientRect();
+      if (rect) {
+        setTooltipPosition({
+          x: event.clientX - rect.left,
+          y: event.clientY - rect.top,
+        });
+      }
+    }
+  };
+
   return (
     <div 
       ref={containerRef}
-      className="fixed inset-0 pointer-events-none overflow-hidden"
+      className="fixed inset-0 overflow-hidden"
       style={{ zIndex: 0 }}
-      aria-hidden="true"
     >
       {/* Animated nebula cloud that fades in */}
       <motion.div 
-        className="absolute w-[600px] h-[600px] rounded-full"
+        className="absolute w-[600px] h-[600px] rounded-full pointer-events-none"
         style={{
           opacity: nebulaOpacity,
           left: '60%',
@@ -133,7 +172,7 @@ const ScrollStorytelling = () => {
       />
       
       <motion.div 
-        className="absolute w-[400px] h-[400px] rounded-full"
+        className="absolute w-[400px] h-[400px] rounded-full pointer-events-none"
         style={{
           opacity: nebulaOpacity,
           left: '10%',
@@ -143,7 +182,7 @@ const ScrollStorytelling = () => {
         }}
       />
 
-      {/* Constellations that appear at scroll milestones */}
+      {/* Constellations that appear at scroll milestones - interactive */}
       <svg className="absolute inset-0 w-full h-full">
         <defs>
           <filter id="starGlow">
@@ -153,9 +192,20 @@ const ScrollStorytelling = () => {
               <feMergeNode in="SourceGraphic"/>
             </feMerge>
           </filter>
+          <filter id="starGlowHover">
+            <feGaussianBlur stdDeviation="4" result="coloredBlur"/>
+            <feMerge>
+              <feMergeNode in="coloredBlur"/>
+              <feMergeNode in="SourceGraphic"/>
+            </feMerge>
+          </filter>
           <linearGradient id="lineGradient" x1="0%" y1="0%" x2="100%" y2="100%">
             <stop offset="0%" stopColor="hsl(40, 85%, 65%)" stopOpacity="0.6"/>
             <stop offset="100%" stopColor="hsl(40, 85%, 65%)" stopOpacity="0.2"/>
+          </linearGradient>
+          <linearGradient id="lineGradientHover" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" stopColor="hsl(40, 85%, 75%)" stopOpacity="0.9"/>
+            <stop offset="100%" stopColor="hsl(40, 85%, 65%)" stopOpacity="0.5"/>
           </linearGradient>
         </defs>
         
@@ -164,13 +214,82 @@ const ScrollStorytelling = () => {
             key={constellation.id}
             constellation={constellation}
             scrollProgress={smoothProgress}
+            isHovered={hoveredConstellation?.id === constellation.id}
+            onHover={handleConstellationHover}
           />
         ))}
       </svg>
 
+      {/* Constellation mythology tooltip */}
+      <AnimatePresence>
+        {hoveredConstellation && (
+          <motion.div
+            initial={{ opacity: 0, scale: 0.9, y: 10 }}
+            animate={{ opacity: 1, scale: 1, y: 0 }}
+            exit={{ opacity: 0, scale: 0.9, y: 10 }}
+            transition={{ duration: 0.2 }}
+            className="fixed z-50 pointer-events-none max-w-xs"
+            style={{
+              left: Math.min(tooltipPosition.x + 20, window.innerWidth - 320),
+              top: Math.min(tooltipPosition.y - 20, window.innerHeight - 250),
+            }}
+          >
+            <div 
+              className="p-4 rounded-xl backdrop-blur-xl"
+              style={{
+                background: 'linear-gradient(135deg, hsla(215, 20%, 12%, 0.95) 0%, hsla(215, 25%, 8%, 0.95) 100%)',
+                border: '1px solid hsla(40, 85%, 65%, 0.3)',
+                boxShadow: '0 0 40px hsla(40, 85%, 65%, 0.15), 0 20px 60px hsla(215, 30%, 3%, 0.8)',
+              }}
+            >
+              <h3 
+                className="font-display text-lg tracking-wider mb-2"
+                style={{ 
+                  color: 'hsl(40, 85%, 65%)',
+                  textShadow: '0 0 10px hsla(40, 85%, 65%, 0.5)',
+                }}
+              >
+                {hoveredConstellation.name}
+              </h3>
+              
+              <p className="text-sm text-muted-foreground mb-3 leading-relaxed">
+                {hoveredConstellation.mythology.origin}
+              </p>
+              
+              <div 
+                className="text-xs mb-3 p-2 rounded-lg"
+                style={{ 
+                  background: 'hsla(40, 85%, 65%, 0.1)',
+                  border: '1px solid hsla(40, 85%, 65%, 0.2)',
+                }}
+              >
+                <span className="text-primary font-display tracking-wider">MEANING: </span>
+                <span className="text-foreground/80">{hoveredConstellation.mythology.meaning}</span>
+              </div>
+              
+              <div className="flex flex-wrap gap-2">
+                {hoveredConstellation.mythology.keyStars.map((star) => (
+                  <span 
+                    key={star}
+                    className="text-xs px-2 py-1 rounded-full"
+                    style={{
+                      background: 'hsla(40, 85%, 65%, 0.15)',
+                      color: 'hsl(40, 85%, 70%)',
+                      border: '1px solid hsla(40, 85%, 65%, 0.3)',
+                    }}
+                  >
+                    ★ {star}
+                  </span>
+                ))}
+              </div>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
       {/* Distant spiral galaxy */}
       <motion.div
-        className="absolute"
+        className="absolute pointer-events-none"
         style={{
           right: '15%',
           top: '60%',
@@ -216,7 +335,7 @@ const ScrollStorytelling = () => {
 
       {/* Comet with tail at end of journey */}
       <motion.div
-        className="absolute"
+        className="absolute pointer-events-none"
         style={{
           left: useTransform(cometProgress, [0, 1], ['0%', '100%']),
           top: useTransform(cometProgress, [0, 1], ['80%', '20%']),
@@ -256,13 +375,17 @@ const ScrollStorytelling = () => {
   );
 };
 
-// Individual constellation with animated drawing
+// Individual constellation with animated drawing and hover interactivity
 const ConstellationGroup = ({ 
   constellation, 
-  scrollProgress 
+  scrollProgress,
+  isHovered,
+  onHover,
 }: { 
   constellation: Constellation;
   scrollProgress: ReturnType<typeof useSpring>;
+  isHovered: boolean;
+  onHover: (constellation: Constellation | null, event?: React.MouseEvent) => void;
 }) => {
   const visibility = useTransform(
     scrollProgress,
@@ -276,8 +399,28 @@ const ConstellationGroup = ({
     [0, 1]
   );
 
+  // Calculate bounding box for hit area
+  const minX = Math.min(...constellation.stars.map(s => s.x)) - 3;
+  const maxX = Math.max(...constellation.stars.map(s => s.x)) + 3;
+  const minY = Math.min(...constellation.stars.map(s => s.y)) - 3;
+  const maxY = Math.max(...constellation.stars.map(s => s.y)) + 3;
+
   return (
     <motion.g style={{ opacity: visibility }}>
+      {/* Invisible hit area for hover detection */}
+      <rect
+        x={`${minX}%`}
+        y={`${minY}%`}
+        width={`${maxX - minX}%`}
+        height={`${maxY - minY}%`}
+        fill="transparent"
+        className="cursor-pointer"
+        style={{ pointerEvents: 'all' }}
+        onMouseEnter={(e) => onHover(constellation, e)}
+        onMouseMove={(e) => isHovered && onHover(constellation, e)}
+        onMouseLeave={() => onHover(null)}
+      />
+      
       {/* Constellation lines */}
       {constellation.lines.map(([startIdx, endIdx], lineIdx) => {
         const start = constellation.stars[startIdx];
@@ -290,12 +433,13 @@ const ConstellationGroup = ({
             y1={`${start.y}%`}
             x2={`${end.x}%`}
             y2={`${end.y}%`}
-            stroke="url(#lineGradient)"
-            strokeWidth="1"
-            strokeDasharray="4 4"
+            stroke={isHovered ? "url(#lineGradientHover)" : "url(#lineGradient)"}
+            strokeWidth={isHovered ? 2 : 1}
+            strokeDasharray={isHovered ? "0" : "4 4"}
             style={{
               pathLength: lineProgress,
-              opacity: useTransform(lineProgress, [0, 0.5], [0, 0.6]),
+              opacity: useTransform(lineProgress, [0, 0.5], [0, isHovered ? 1 : 0.6]),
+              transition: 'stroke-width 0.3s, stroke-dasharray 0.3s',
             }}
           />
         );
@@ -307,11 +451,12 @@ const ConstellationGroup = ({
           key={`star-${idx}`}
           cx={`${star.x}%`}
           cy={`${star.y}%`}
-          r={star.size}
-          fill="hsl(40, 85%, 75%)"
-          filter="url(#starGlow)"
+          r={isHovered ? star.size * 1.5 : star.size}
+          fill={isHovered ? "hsl(40, 90%, 85%)" : "hsl(40, 85%, 75%)"}
+          filter={isHovered ? "url(#starGlowHover)" : "url(#starGlow)"}
           style={{
             scale: useTransform(visibility, [0, 1], [0, 1]),
+            transition: 'r 0.3s, fill 0.3s',
           }}
         />
       ))}
@@ -320,12 +465,14 @@ const ConstellationGroup = ({
       <motion.text
         x={`${constellation.stars[0].x + 3}%`}
         y={`${constellation.stars[0].y - 2}%`}
-        fill="hsl(40, 85%, 65%)"
-        fontSize="10"
+        fill={isHovered ? "hsl(40, 90%, 75%)" : "hsl(40, 85%, 65%)"}
+        fontSize={isHovered ? "12" : "10"}
         fontFamily="Iceland, sans-serif"
         letterSpacing="0.2em"
         style={{
-          opacity: useTransform(visibility, [0.5, 1], [0, 0.7]),
+          opacity: useTransform(visibility, [0.5, 1], [0, isHovered ? 1 : 0.7]),
+          transition: 'font-size 0.3s, fill 0.3s',
+          textShadow: isHovered ? '0 0 15px hsla(40, 85%, 65%, 0.8)' : 'none',
         }}
       >
         {constellation.name.toUpperCase()}
