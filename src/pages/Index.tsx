@@ -1,13 +1,25 @@
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, lazy, Suspense } from "react";
 import { Link } from "react-router-dom";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { ArrowRight, Sparkles, Eye, Heart, Briefcase, Calendar, User, Shield, Star, Zap } from "lucide-react";
 import NewsletterForm from "@/components/NewsletterForm";
 import ZodiacWheelSection from "@/components/ZodiacWheelSection";
-import CosmicDescent from "@/components/CosmicDescent";
+
+// Lazy load the 3D scrollytelling hero for better initial load
+const ScrollytellingHero = lazy(() => import("@/components/three/ScrollytellingHero"));
 
 gsap.registerPlugin(ScrollTrigger);
+
+// Loading fallback
+const HeroLoader = () => (
+  <div className="h-screen flex items-center justify-center bg-background">
+    <div className="flex flex-col items-center gap-4">
+      <div className="w-16 h-16 rounded-full border-2 border-primary border-t-transparent animate-spin" />
+      <span className="text-muted-foreground font-display tracking-wider">Initializing cosmos...</span>
+    </div>
+  </div>
+);
 
 const Index = () => {
   const featuresRef = useRef<HTMLDivElement>(null);
@@ -111,8 +123,10 @@ const Index = () => {
 
   return (
     <div className="relative">
-      {/* Immersive Cosmic Descent Scrollytelling */}
-      <CosmicDescent />
+      {/* 3D Scrollytelling Hero Section */}
+      <Suspense fallback={<HeroLoader />}>
+        <ScrollytellingHero />
+      </Suspense>
 
       {/* How It Works Section */}
       <section ref={featuresRef} className="relative z-10 py-24 bg-transparent">
