@@ -602,46 +602,53 @@ const ShootingStarElement = ({ star }: { star: ShootingStar }) => {
 };
 
 // Subtle journey milestone text that fades in/out
+// Individual milestone component to avoid hooks-in-map violation
+const MilestoneItem = ({ 
+  scrollProgress, 
+  progress, 
+  text, 
+  topPercent 
+}: { 
+  scrollProgress: ReturnType<typeof useSpring>; 
+  progress: number; 
+  text: string; 
+  topPercent: number;
+}) => {
+  const opacity = useTransform(
+    scrollProgress,
+    [progress - 0.05, progress, progress + 0.08, progress + 0.15],
+    [0, 0.8, 0.8, 0]
+  );
+
+  return (
+    <motion.div
+      className="absolute left-1/2 -translate-x-1/2 text-center"
+      style={{ top: `${topPercent}%`, opacity }}
+    >
+      <span 
+        className="text-xs tracking-[0.3em] uppercase"
+        style={{ 
+          color: 'hsl(40, 85%, 65%)',
+          textShadow: '0 0 20px hsla(40, 85%, 65%, 0.5)',
+        }}
+      >
+        {text}
+      </span>
+    </motion.div>
+  );
+};
+
 const JourneyMilestones = ({ 
   scrollProgress 
 }: { 
   scrollProgress: ReturnType<typeof useSpring>;
-}) => {
-  const milestones = [
-    { progress: 0.15, text: 'Entering the constellation zone...' },
-    { progress: 0.4, text: 'Passing through the Solar System...' },
-    { progress: 0.65, text: 'Descending through the clouds...' },
-    { progress: 0.85, text: 'Approaching the ancient ground...' },
-  ];
-
-  return (
-    <>
-      {milestones.map((milestone, idx) => (
-        <motion.div
-          key={idx}
-          className="absolute left-1/2 -translate-x-1/2 text-center"
-          style={{
-            top: `${20 + idx * 25}%`,
-            opacity: useTransform(
-              scrollProgress,
-              [milestone.progress - 0.05, milestone.progress, milestone.progress + 0.08, milestone.progress + 0.15],
-              [0, 0.8, 0.8, 0]
-            ),
-          }}
-        >
-          <span 
-            className="text-xs tracking-[0.3em] uppercase"
-            style={{ 
-              color: 'hsl(40, 85%, 65%)',
-              textShadow: '0 0 20px hsla(40, 85%, 65%, 0.5)',
-            }}
-          >
-            {milestone.text}
-          </span>
-        </motion.div>
-      ))}
-    </>
-  );
-};
+}) => (
+  <>
+    <MilestoneItem scrollProgress={scrollProgress} progress={0.15} text="Entering the constellation zone..." topPercent={20} />
+    <MilestoneItem scrollProgress={scrollProgress} progress={0.4} text="Passing through the Solar System..." topPercent={45} />
+    <MilestoneItem scrollProgress={scrollProgress} progress={0.65} text="Descending through the clouds..." topPercent={70} />
+    <MilestoneItem scrollProgress={scrollProgress} progress={0.85} text="Approaching the ancient ground..." topPercent={95} />
+  </>
+);
 
 export default ScrollStorytelling;
