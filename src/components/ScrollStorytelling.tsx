@@ -115,18 +115,18 @@ const ScrollStorytelling = () => {
   const { scrollYProgress } = useScroll();
   const smoothProgress = useSpring(scrollYProgress, { stiffness: 100, damping: 30 });
   
-  // Transform values for different scroll sections
-  // Phase 1 (0-30%): Deep space with zodiac constellations
-  const nebulaOpacity = useTransform(smoothProgress, [0, 0.15], [0.3, 0.8]);
-  const topNebulaOpacity = useTransform(smoothProgress, [0, 0.1], [0.6, 0.9]);
-  // Phase 2 (30-60%): Solar system region - deep space stars behind
-  const galaxyScale = useTransform(smoothProgress, [0.3, 0.5], [0.5, 1]);
-  const galaxyOpacity = useTransform(smoothProgress, [0.25, 0.35, 0.55, 0.65], [0, 0.9, 0.9, 0]);
-  const cometProgress = useTransform(smoothProgress, [0.4, 0.6], [0, 1]);
-  // Phase 3 (60-80%): Clouds transition
-  const cloudLayerOpacity = useTransform(smoothProgress, [0.55, 0.7, 0.85], [0, 0.7, 0.4]);
-  // Phase 4 (80-100%): Earth / ground
-  const earthLayerOpacity = useTransform(smoothProgress, [0.75, 0.9], [0, 1]);
+  // Transform values — overlapping transitions for smooth blending
+  // Phase 1 (0-40%): Deep space with zodiac constellations — lingers into phase 2
+  const nebulaOpacity = useTransform(smoothProgress, [0, 0.15, 0.5, 0.7], [0.4, 0.9, 0.6, 0.2]);
+  const topNebulaOpacity = useTransform(smoothProgress, [0, 0.1, 0.4, 0.6], [0.7, 1, 0.7, 0.2]);
+  // Phase 2 (25-65%): Solar system region — overlaps with phase 1 and 3
+  const galaxyScale = useTransform(smoothProgress, [0.2, 0.45], [0.5, 1]);
+  const galaxyOpacity = useTransform(smoothProgress, [0.2, 0.3, 0.55, 0.7], [0, 0.9, 0.9, 0]);
+  const cometProgress = useTransform(smoothProgress, [0.35, 0.6], [0, 1]);
+  // Phase 3 (50-85%): Clouds transition — overlaps with phase 2 and 4
+  const cloudLayerOpacity = useTransform(smoothProgress, [0.45, 0.6, 0.8, 0.9], [0, 0.7, 0.5, 0.3]);
+  // Phase 4 (70-100%): Earth / ground — overlaps with phase 3
+  const earthLayerOpacity = useTransform(smoothProgress, [0.65, 0.85], [0, 1]);
   // Comet transforms (must be at top level, not inside JSX)
   const cometLeft = useTransform(cometProgress, [0, 1], ['0%', '100%']);
   const cometTop = useTransform(cometProgress, [0, 1], ['80%', '20%']);
@@ -490,6 +490,19 @@ const ScrollStorytelling = () => {
           />
         </svg>
       </motion.div>
+
+      {/* Unifying gradient overlay — subtle deep blue/purple that darkens toward bottom */}
+      <div 
+        className="absolute inset-0 pointer-events-none"
+        style={{
+          background: `linear-gradient(to bottom, 
+            hsla(240, 40%, 15%, 0.15) 0%, 
+            hsla(230, 35%, 12%, 0.1) 30%, 
+            hsla(220, 30%, 10%, 0.15) 60%, 
+            hsla(215, 30%, 6%, 0.3) 100%
+          )`,
+        }}
+      />
 
       {/* Journey milestone text hints */}
       <JourneyMilestones scrollProgress={smoothProgress} />

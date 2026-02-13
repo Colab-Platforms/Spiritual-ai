@@ -131,24 +131,24 @@ const Index = () => {
       {/* How It Works Section */}
       <section ref={featuresRef} className="relative z-10 py-24" style={{ background: 'transparent' }}>
         <div className="container mx-auto px-4">
-          <div className="text-center mb-16 p-6 rounded-2xl backdrop-blur-md" style={{ background: 'hsla(215, 25%, 6%, 0.5)' }}>
-            <h2 className="font-display text-3xl md:text-4xl tracking-wider text-glow text-primary mb-4">
+        <div className="text-center mb-16">
+            <h2 className="font-display text-3xl md:text-4xl tracking-wider text-glow text-primary mb-4" style={{ textShadow: '0 0 20px hsla(40, 85%, 65%, 0.5), 0 2px 10px hsla(0, 0%, 0%, 0.8)' }}>
               How It Works
             </h2>
-            <p className="text-muted-foreground max-w-xl mx-auto tracking-wide">
+            <p className="text-muted-foreground max-w-xl mx-auto tracking-wide" style={{ textShadow: '0 1px 8px hsla(0, 0%, 0%, 0.9)' }}>
               Your journey to cosmic enlightenment in four simple steps
             </p>
           </div>
 
           <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
             {howItWorks.map((item, index) => (
-              <div key={index} className="step-card rounded-2xl p-6 text-center relative backdrop-blur-md" style={{ background: 'hsla(215, 20%, 8%, 0.6)', border: '1px solid hsla(215, 15%, 18%, 0.5)' }}>
+              <div key={index} className="step-card rounded-2xl p-6 text-center relative bg-transparent border border-white/15 hover:border-primary/40 transition-all duration-500">
                 <div className="absolute top-4 left-4 text-5xl font-display text-primary/10">{item.step}</div>
-                <div className="w-14 h-14 mx-auto mb-5 rounded-xl border border-primary/30 flex items-center justify-center bg-primary/5">
+                <div className="w-14 h-14 mx-auto mb-5 rounded-xl border border-primary/30 flex items-center justify-center">
                   <item.icon className="w-7 h-7 text-primary" />
                 </div>
-                <h3 className="font-display text-lg tracking-wider text-foreground mb-2">{item.title}</h3>
-                <p className="text-sm text-muted-foreground">{item.description}</p>
+                <h3 className="font-display text-lg tracking-wider text-foreground mb-2" style={{ textShadow: '0 1px 8px hsla(0, 0%, 0%, 0.9)' }}>{item.title}</h3>
+                <p className="text-sm text-muted-foreground" style={{ textShadow: '0 1px 6px hsla(0, 0%, 0%, 0.8)' }}>{item.description}</p>
               </div>
             ))}
           </div>
@@ -158,11 +158,11 @@ const Index = () => {
       {/* What We Offer Section */}
       <section ref={offerRef} className="relative z-10 py-24" style={{ background: 'transparent' }}>
         <div className="container mx-auto px-4">
-          <div className="text-center mb-16 p-6 rounded-2xl backdrop-blur-md" style={{ background: 'hsla(215, 25%, 6%, 0.5)' }}>
-            <h2 className="font-display text-3xl md:text-4xl tracking-wider text-glow text-primary mb-4">
+        <div className="text-center mb-16">
+            <h2 className="font-display text-3xl md:text-4xl tracking-wider text-glow text-primary mb-4" style={{ textShadow: '0 0 20px hsla(40, 85%, 65%, 0.5), 0 2px 10px hsla(0, 0%, 0%, 0.8)' }}>
               What We Offer
             </h2>
-            <p className="text-muted-foreground max-w-xl mx-auto tracking-wide">
+            <p className="text-muted-foreground max-w-xl mx-auto tracking-wide" style={{ textShadow: '0 1px 8px hsla(0, 0%, 0%, 0.9)' }}>
               Comprehensive cosmic guidance for every aspect of your life
             </p>
           </div>
@@ -171,16 +171,15 @@ const Index = () => {
             {offerings.map((item, index) => (
               <div
                 key={index}
-                className="offer-card rounded-2xl p-6 border border-border hover:border-primary/40 transition-all duration-500 group cursor-pointer hover:shadow-[0_0_30px_rgba(245,195,106,0.1)] backdrop-blur-md"
-                style={{ background: 'hsla(215, 20%, 8%, 0.6)' }}
+                className="offer-card rounded-2xl p-6 bg-transparent border border-white/15 hover:border-primary/40 transition-all duration-500 group cursor-pointer hover:shadow-[0_0_30px_rgba(245,195,106,0.15)]"
               >
-                <div className="w-12 h-12 mb-4 rounded-lg border border-primary/30 flex items-center justify-center bg-primary/5 group-hover:bg-primary/10 transition-colors">
+                <div className="w-12 h-12 mb-4 rounded-lg border border-primary/30 flex items-center justify-center">
                   <item.icon className="w-6 h-6 text-primary" />
                 </div>
-                <h3 className="font-display text-xl tracking-wider text-foreground mb-2 group-hover:text-primary transition-colors">
+                <h3 className="font-display text-xl tracking-wider text-foreground mb-2 group-hover:text-primary transition-colors" style={{ textShadow: '0 1px 8px hsla(0, 0%, 0%, 0.9)' }}>
                   {item.title}
                 </h3>
-                <p className="text-sm text-muted-foreground">{item.description}</p>
+                <p className="text-sm text-muted-foreground" style={{ textShadow: '0 1px 6px hsla(0, 0%, 0%, 0.8)' }}>{item.description}</p>
               </div>
             ))}
           </div>
@@ -193,17 +192,17 @@ const Index = () => {
       {/* Why Trust Section */}
       <section ref={trustRef} className="relative z-10 py-24" style={{ background: 'transparent' }}>
         <div className="container mx-auto px-4">
-          <div className="rounded-3xl p-8 md:p-12 backdrop-blur-md" style={{ background: 'hsla(215, 20%, 8%, 0.6)', border: '1px solid hsla(215, 15%, 18%, 0.5)' }}>
+          <div className="rounded-3xl p-8 md:p-12 bg-transparent border border-white/15">
             <div className="grid lg:grid-cols-2 gap-12 items-center">
               <div>
                 <div className="inline-flex items-center gap-2 text-primary mb-4">
                   <Shield className="w-5 h-5" />
-                  <span className="text-sm uppercase tracking-[0.2em]">Trust & Accuracy</span>
+                  <span className="text-sm uppercase tracking-[0.2em]" style={{ textShadow: '0 1px 8px hsla(0, 0%, 0%, 0.9)' }}>Trust & Accuracy</span>
                 </div>
-                <h2 className="font-display text-3xl md:text-4xl tracking-wider text-foreground mb-6">
+                <h2 className="font-display text-3xl md:text-4xl tracking-wider text-foreground mb-6" style={{ textShadow: '0 0 20px hsla(40, 85%, 65%, 0.3), 0 2px 10px hsla(0, 0%, 0%, 0.8)' }}>
                   Why Trust Our Astrology
                 </h2>
-                <p className="text-muted-foreground leading-relaxed mb-8">
+                <p className="text-muted-foreground leading-relaxed mb-8" style={{ textShadow: '0 1px 8px hsla(0, 0%, 0%, 0.9)' }}>
                   Our readings combine ancient astrological wisdom with modern psychological insights, providing you
                   with accurate, meaningful guidance for your journey through life.
                 </p>
@@ -217,12 +216,12 @@ const Index = () => {
                 {trustReasons.map((reason, index) => (
                   <div
                     key={index}
-                    className="trust-item flex items-start gap-4 p-4 rounded-xl bg-card/50 border border-border hover:border-primary/30 transition-colors"
+                    className="trust-item flex items-start gap-4 p-4 rounded-xl bg-transparent border border-white/10 hover:border-primary/30 transition-colors"
                   >
                     <div className="w-2 h-2 mt-2 rounded-full bg-primary flex-shrink-0" />
                     <div>
-                      <h4 className="font-display text-lg tracking-wider text-foreground mb-1">{reason.title}</h4>
-                      <p className="text-sm text-muted-foreground">{reason.description}</p>
+                    <h4 className="font-display text-lg tracking-wider text-foreground mb-1" style={{ textShadow: '0 1px 8px hsla(0, 0%, 0%, 0.9)' }}>{reason.title}</h4>
+                      <p className="text-sm text-muted-foreground" style={{ textShadow: '0 1px 6px hsla(0, 0%, 0%, 0.8)' }}>{reason.description}</p>
                     </div>
                   </div>
                 ))}
@@ -235,7 +234,7 @@ const Index = () => {
       {/* Newsletter CTA Section */}
       <section className="relative z-10 py-24" style={{ background: 'transparent' }}>
         <div className="container mx-auto px-4">
-          <div className="rounded-3xl p-8 md:p-12 text-center max-w-3xl mx-auto relative overflow-hidden backdrop-blur-md" style={{ background: 'hsla(215, 20%, 8%, 0.6)', border: '1px solid hsla(215, 15%, 18%, 0.5)' }}>
+          <div className="rounded-3xl p-8 md:p-12 text-center max-w-3xl mx-auto relative overflow-hidden bg-transparent border border-white/15">
             {/* Decorative corners */}
             <div className="absolute top-4 left-4 w-8 h-8 border-l-2 border-t-2 border-primary/30" />
             <div className="absolute top-4 right-4 w-8 h-8 border-r-2 border-t-2 border-primary/30" />
@@ -243,10 +242,10 @@ const Index = () => {
             <div className="absolute bottom-4 right-4 w-8 h-8 border-r-2 border-b-2 border-primary/30" />
 
             <Sparkles className="w-10 h-10 text-primary mx-auto mb-6" />
-            <h2 className="font-display text-2xl md:text-3xl tracking-wider text-foreground mb-4">
+            <h2 className="font-display text-2xl md:text-3xl tracking-wider text-foreground mb-4" style={{ textShadow: '0 0 20px hsla(40, 85%, 65%, 0.3), 0 2px 10px hsla(0, 0%, 0%, 0.8)' }}>
               Receive Daily Cosmic Wisdom
             </h2>
-            <p className="text-muted-foreground mb-8 max-w-md mx-auto">
+            <p className="text-muted-foreground mb-8 max-w-md mx-auto" style={{ textShadow: '0 1px 8px hsla(0, 0%, 0%, 0.9)' }}>
               Subscribe to get personalized horoscopes and celestial insights delivered to your inbox.
             </p>
             <NewsletterForm />

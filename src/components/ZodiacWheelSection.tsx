@@ -168,7 +168,7 @@ export const ZodiacWheelSection = () => {
         <div className="grid lg:grid-cols-2 gap-8 lg:gap-16 items-center min-h-[550px]">
           {/* Left: Info Panel */}
           <div className="order-2 lg:order-1">
-            <div className="glass-card rounded-3xl p-8 md:p-10 min-h-[420px] flex flex-col justify-center relative overflow-hidden">
+            <div className="rounded-3xl p-8 md:p-10 min-h-[420px] flex flex-col justify-center relative overflow-hidden bg-transparent border border-white/15" style={{ textShadow: '0 1px 8px hsla(0, 0%, 0%, 0.9)' }}>
               {/* Decorative corners */}
               <div className="absolute top-4 left-4 w-6 h-6 border-l border-t border-primary/40" />
               <div className="absolute top-4 right-4 w-6 h-6 border-r border-t border-primary/40" />
