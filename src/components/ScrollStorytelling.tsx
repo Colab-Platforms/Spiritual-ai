@@ -155,22 +155,61 @@ const ScrollStorytelling = () => {
 
         {/* Star field */}
         <svg className="absolute inset-0 w-full h-full">
-          {staticStars.map((star, i) => (
-            <circle
-              key={`star-${i}`}
-              cx={`${star.x}%`} cy={`${star.y}%`} r={star.size}
-              fill={i % 3 === 0 ? '#C7D2FE' : i % 3 === 1 ? '#A5B4FC' : '#E0E7FF'}
-              opacity={star.opacity}
-            >
-              <animate
-                attributeName="opacity"
-                values={`${star.opacity};${star.opacity * 0.3};${star.opacity}`}
-                dur={`${3 + star.twinkleDelay}s`}
-                repeatCount="indefinite"
-                begin={`${star.twinkleDelay}s`}
-              />
-            </circle>
-          ))}
+          <defs>
+            <filter id="starSoftGlow">
+              <feGaussianBlur stdDeviation="2" result="blur" />
+              <feMerge><feMergeNode in="blur" /><feMergeNode in="blur" /><feMergeNode in="SourceGraphic" /></feMerge>
+            </filter>
+            <filter id="starBrightGlow">
+              <feGaussianBlur stdDeviation="3.5" result="blur" />
+              <feMerge><feMergeNode in="blur" /><feMergeNode in="blur" /><feMergeNode in="blur" /><feMergeNode in="SourceGraphic" /></feMerge>
+            </filter>
+          </defs>
+          {staticStars.map((star, i) => {
+            const isBright = star.size > 1.8;
+            const color = i % 3 === 0 ? '#C7D2FE' : i % 3 === 1 ? '#A5B4FC' : '#E0E7FF';
+            return (
+              <g key={`star-${i}`}>
+                {/* Outer glow halo */}
+                {isBright && (
+                  <circle
+                    cx={`${star.x}%`} cy={`${star.y}%`} r={star.size * 4}
+                    fill={color} opacity={star.opacity * 0.08}
+                    filter="url(#starBrightGlow)"
+                  />
+                )}
+                {/* Core star */}
+                <circle
+                  cx={`${star.x}%`} cy={`${star.y}%`} r={star.size}
+                  fill={color} opacity={star.opacity}
+                  filter={isBright ? 'url(#starBrightGlow)' : 'url(#starSoftGlow)'}
+                >
+                  <animate
+                    attributeName="opacity"
+                    values={`${star.opacity};${star.opacity * 0.3};${star.opacity}`}
+                    dur={`${3 + star.twinkleDelay}s`}
+                    repeatCount="indefinite"
+                    begin={`${star.twinkleDelay}s`}
+                  />
+                </circle>
+                {/* Bright center dot */}
+                {isBright && (
+                  <circle
+                    cx={`${star.x}%`} cy={`${star.y}%`} r={star.size * 0.4}
+                    fill="#FFFFFF" opacity={star.opacity * 0.9}
+                  >
+                    <animate
+                      attributeName="opacity"
+                      values={`${star.opacity * 0.9};${star.opacity * 0.4};${star.opacity * 0.9}`}
+                      dur={`${3 + star.twinkleDelay}s`}
+                      repeatCount="indefinite"
+                      begin={`${star.twinkleDelay}s`}
+                    />
+                  </circle>
+                )}
+              </g>
+            );
+          })}
         </svg>
 
         {/* Giant Planet */}
@@ -180,43 +219,83 @@ const ScrollStorytelling = () => {
         >
           <svg viewBox="0 0 500 500" className="w-full h-full">
             <defs>
-              <radialGradient id="planetBody" cx="40%" cy="35%" r="50%">
-                <stop offset="0%" stopColor="#4338CA" />
-                <stop offset="40%" stopColor="#3730A3" />
-                <stop offset="70%" stopColor="#312E81" />
-                <stop offset="100%" stopColor="#1E1B4B" />
+              <radialGradient id="planetBody" cx="35%" cy="30%" r="55%">
+                <stop offset="0%" stopColor="#5B52E5" />
+                <stop offset="25%" stopColor="#4338CA" />
+                <stop offset="50%" stopColor="#3730A3" />
+                <stop offset="75%" stopColor="#252362" />
+                <stop offset="100%" stopColor="#131136" />
               </radialGradient>
-              <radialGradient id="planetHighlight" cx="30%" cy="25%" r="40%">
-                <stop offset="0%" stopColor="#818CF8" stopOpacity="0.5" />
+              {/* Bright highlight — top-left (moonlight source) */}
+              <radialGradient id="planetHighlight" cx="25%" cy="20%" r="35%">
+                <stop offset="0%" stopColor="#A5B4FC" stopOpacity="0.6" />
+                <stop offset="40%" stopColor="#818CF8" stopOpacity="0.25" />
                 <stop offset="100%" stopColor="transparent" stopOpacity="0" />
               </radialGradient>
-              <radialGradient id="planetShadow" cx="70%" cy="65%" r="50%">
+              {/* Deep shadow — bottom-right (away from light) */}
+              <radialGradient id="planetShadow" cx="75%" cy="70%" r="50%">
                 <stop offset="0%" stopColor="transparent" stopOpacity="0" />
-                <stop offset="60%" stopColor="#0F172A" stopOpacity="0.6" />
-                <stop offset="100%" stopColor="#0F172A" stopOpacity="0.9" />
+                <stop offset="40%" stopColor="#0a0e14" stopOpacity="0.4" />
+                <stop offset="70%" stopColor="#0a0e14" stopOpacity="0.7" />
+                <stop offset="100%" stopColor="#050810" stopOpacity="0.95" />
               </radialGradient>
-              <radialGradient id="planetGlow" cx="50%" cy="50%" r="52%">
-                <stop offset="85%" stopColor="transparent" stopOpacity="0" />
-                <stop offset="95%" stopColor="#6366F1" stopOpacity="0.25" />
-                <stop offset="100%" stopColor="#6366F1" stopOpacity="0" />
+              {/* Atmospheric glow around planet */}
+              <radialGradient id="planetGlow" cx="50%" cy="50%" r="55%">
+                <stop offset="78%" stopColor="transparent" stopOpacity="0" />
+                <stop offset="88%" stopColor="#6366F1" stopOpacity="0.15" />
+                <stop offset="94%" stopColor="#818CF8" stopOpacity="0.08" />
+                <stop offset="100%" stopColor="transparent" stopOpacity="0" />
+              </radialGradient>
+              {/* Rim light — left edge (bright crescent) */}
+              <radialGradient id="planetRimLight" cx="10%" cy="40%" r="55%">
+                <stop offset="0%" stopColor="#C7D2FE" stopOpacity="0.35" />
+                <stop offset="15%" stopColor="#A5B4FC" stopOpacity="0.15" />
+                <stop offset="30%" stopColor="transparent" stopOpacity="0" />
+              </radialGradient>
+              {/* Crater shadow */}
+              <radialGradient id="craterShadow" cx="60%" cy="60%" r="50%">
+                <stop offset="0%" stopColor="#1E1B4B" stopOpacity="0.5" />
+                <stop offset="70%" stopColor="#252362" stopOpacity="0.3" />
+                <stop offset="100%" stopColor="transparent" stopOpacity="0" />
               </radialGradient>
               <clipPath id="planetClip"><circle cx="250" cy="250" r="180" /></clipPath>
+              <filter id="planetAtmoGlow">
+                <feGaussianBlur stdDeviation="8" result="glow" />
+                <feMerge><feMergeNode in="glow" /><feMergeNode in="SourceGraphic" /></feMerge>
+              </filter>
             </defs>
-            <circle cx="250" cy="250" r="210" fill="url(#planetGlow)" />
+            {/* Outer atmospheric glow */}
+            <circle cx="250" cy="250" r="220" fill="url(#planetGlow)" filter="url(#planetAtmoGlow)" />
+            {/* Planet body */}
             <circle cx="250" cy="250" r="180" fill="url(#planetBody)" />
+            {/* Surface detail */}
             <g clipPath="url(#planetClip)">
-              <ellipse cx="250" cy="200" rx="180" ry="15" fill="#4F46E5" opacity="0.3" />
-              <ellipse cx="250" cy="230" rx="180" ry="8" fill="#6366F1" opacity="0.2" />
-              <ellipse cx="250" cy="270" rx="180" ry="20" fill="#4338CA" opacity="0.25" />
-              <circle cx="200" cy="210" r="25" fill="#312E81" opacity="0.4" />
-              <circle cx="200" cy="210" r="22" fill="#3730A3" opacity="0.3" />
-              <circle cx="310" cy="270" r="18" fill="#312E81" opacity="0.35" />
-              <circle cx="220" cy="300" r="12" fill="#312E81" opacity="0.3" />
+              {/* Atmospheric bands */}
+              <ellipse cx="250" cy="190" rx="180" ry="12" fill="#4F46E5" opacity="0.25" />
+              <ellipse cx="250" cy="215" rx="180" ry="6" fill="#6366F1" opacity="0.15" />
+              <ellipse cx="250" cy="255" rx="180" ry="18" fill="#3730A3" opacity="0.2" />
+              <ellipse cx="250" cy="300" rx="180" ry="10" fill="#4338CA" opacity="0.15" />
+              {/* Craters with depth */}
+              <circle cx="195" cy="205" r="28" fill="#1E1B4B" opacity="0.35" />
+              <circle cx="195" cy="205" r="24" fill="url(#craterShadow)" />
+              <ellipse cx="188" cy="200" rx="8" ry="6" fill="#312E81" opacity="0.3" /> {/* crater rim highlight */}
+              <circle cx="315" cy="275" r="20" fill="#1E1B4B" opacity="0.3" />
+              <circle cx="315" cy="275" r="16" fill="url(#craterShadow)" />
+              <circle cx="225" cy="310" r="14" fill="#1E1B4B" opacity="0.25" />
+              <circle cx="285" cy="185" r="10" fill="#1E1B4B" opacity="0.2" />
             </g>
+            {/* Lighting layers */}
             <circle cx="250" cy="250" r="180" fill="url(#planetHighlight)" />
+            <circle cx="250" cy="250" r="180" fill="url(#planetRimLight)" />
             <circle cx="250" cy="250" r="180" fill="url(#planetShadow)" />
-            <ellipse cx="250" cy="260" rx="260" ry="40" fill="none" stroke="#818CF8" strokeWidth="3" opacity="0.35" strokeDasharray="8 4" />
-            <ellipse cx="250" cy="260" rx="240" ry="35" fill="none" stroke="#6366F1" strokeWidth="1.5" opacity="0.25" />
+            {/* Rim light edge — thin bright arc on left side */}
+            <path d="M 105 150 A 180 180 0 0 0 105 350" fill="none" stroke="#A5B4FC" strokeWidth="1.5" opacity="0.4" filter="url(#planetAtmoGlow)" />
+            {/* Rings with depth */}
+            <ellipse cx="250" cy="260" rx="265" ry="42" fill="none" stroke="#818CF8" strokeWidth="2.5" opacity="0.3" strokeDasharray="8 4">
+              <animate attributeName="stroke-dashoffset" values="0;-24" dur="15s" repeatCount="indefinite" />
+            </ellipse>
+            <ellipse cx="250" cy="260" rx="245" ry="37" fill="none" stroke="#6366F1" strokeWidth="1.5" opacity="0.2" />
+            <ellipse cx="250" cy="260" rx="280" ry="46" fill="none" stroke="#4338CA" strokeWidth="1" opacity="0.15" />
           </svg>
         </motion.div>
 
@@ -382,6 +461,18 @@ const ScrollStorytelling = () => {
       {/* ============================================= */}
       <motion.div className="absolute inset-0 pointer-events-none" style={{ opacity: landscapeOpacity }}>
 
+        {/* Atmospheric haze — horizon layer where sky meets mountains */}
+        <motion.div
+          className="absolute w-full pointer-events-none"
+          style={{ bottom: '35%', height: '25%', y: mountainsBackY }}
+        >
+          <div style={{
+            width: '100%', height: '100%',
+            background: 'linear-gradient(to bottom, transparent 0%, rgba(67, 56, 202, 0.06) 30%, rgba(99, 102, 241, 0.1) 50%, rgba(49, 46, 129, 0.08) 70%, transparent 100%)',
+            filter: 'blur(20px)',
+          }} />
+        </motion.div>
+
         {/* Back mountain range */}
         <motion.svg
           className="absolute bottom-0 w-full pointer-events-none"
@@ -390,15 +481,26 @@ const ScrollStorytelling = () => {
         >
           <defs>
             <linearGradient id="mtBack" x1="0%" y1="0%" x2="0%" y2="100%">
-              <stop offset="0%" stopColor="#312E81" stopOpacity="0.5" />
-              <stop offset="100%" stopColor="#1E1B4B" stopOpacity="0.7" />
+              <stop offset="0%" stopColor="#4338CA" stopOpacity="0.6" />
+              <stop offset="30%" stopColor="#312E81" stopOpacity="0.55" />
+              <stop offset="70%" stopColor="#1E1B4B" stopOpacity="0.65" />
+              <stop offset="100%" stopColor="#131136" stopOpacity="0.8" />
             </linearGradient>
+            <filter id="mtHaze">
+              <feGaussianBlur stdDeviation="4" />
+            </filter>
           </defs>
           <path d="M0,350 L60,280 L140,320 L260,200 L380,280 L500,220 L620,300 L760,160 L880,250 L1000,200 L1120,270 L1260,210 L1380,270 L1440,240 L1440,500 L0,500 Z" fill="url(#mtBack)" />
-          {/* Snow/ice caps — periwinkle highlights */}
-          <path d="M260,200 L275,208 L245,208 Z" fill="#4338CA" opacity="0.4" />
-          <path d="M760,160 L778,172 L742,172 Z" fill="#4338CA" opacity="0.45" />
-          <path d="M1000,200 L1015,210 L985,210 Z" fill="#4338CA" opacity="0.35" />
+          {/* Atmospheric haze where mountains meet sky */}
+          <rect x="0" y="140" width="1440" height="80" fill="url(#mtBack)" opacity="0.15" filter="url(#mtHaze)" />
+          {/* Moonlight-catching peaks */}
+          <path d="M260,200 L275,212 L245,212 Z" fill="#6366F1" opacity="0.5" />
+          <path d="M258,200 L262,200 L260,192 Z" fill="#818CF8" opacity="0.35" /> {/* tip highlight */}
+          <path d="M760,160 L778,175 L742,175 Z" fill="#6366F1" opacity="0.55" />
+          <path d="M758,160 L762,160 L760,150 Z" fill="#A5B4FC" opacity="0.3" /> {/* tip highlight */}
+          <path d="M1000,200 L1015,212 L985,212 Z" fill="#6366F1" opacity="0.4" />
+          {/* Ridge edge highlights (moonlight) */}
+          <path d="M260,200 L380,280 L500,220 L620,300 L760,160 L880,250 L1000,200" fill="none" stroke="#818CF8" strokeWidth="1.5" opacity="0.15" />
         </motion.svg>
 
         {/* Mid mountain range with pine trees */}
@@ -409,11 +511,21 @@ const ScrollStorytelling = () => {
         >
           <defs>
             <linearGradient id="mtMid" x1="0%" y1="0%" x2="0%" y2="100%">
-              <stop offset="0%" stopColor="#252362" />
-              <stop offset="100%" stopColor="#1a1845" />
+              <stop offset="0%" stopColor="#3730A3" stopOpacity="0.9" />
+              <stop offset="25%" stopColor="#312E81" />
+              <stop offset="60%" stopColor="#1E1B4B" />
+              <stop offset="100%" stopColor="#131136" />
+            </linearGradient>
+            <linearGradient id="mtMidHighlight" x1="0%" y1="0%" x2="0%" y2="100%">
+              <stop offset="0%" stopColor="#818CF8" stopOpacity="0.2" />
+              <stop offset="100%" stopColor="transparent" stopOpacity="0" />
             </linearGradient>
           </defs>
           <path d="M0,300 L80,250 L180,280 L280,180 L360,240 L480,200 L600,260 L720,150 L840,220 L960,180 L1100,240 L1220,200 L1340,250 L1440,220 L1440,450 L0,450 Z" fill="url(#mtMid)" />
+          {/* Moonlit face of mountains — left-facing slopes catch light */}
+          <path d="M280,180 L360,240 L280,240 Z" fill="url(#mtMidHighlight)" />
+          <path d="M720,150 L840,220 L720,220 Z" fill="url(#mtMidHighlight)" />
+          <path d="M960,180 L1100,240 L960,240 Z" fill="url(#mtMidHighlight)" />
 
           {/* Pine tree silhouettes on ridges */}
           <g fill="#1a1845" opacity="0.9">
@@ -449,36 +561,54 @@ const ScrollStorytelling = () => {
         >
           <defs>
             <linearGradient id="waterfallGrad" x1="0%" y1="0%" x2="0%" y2="100%">
-              <stop offset="0%" stopColor="#A5B4FC" stopOpacity="0.5" />
-              <stop offset="30%" stopColor="#818CF8" stopOpacity="0.3" />
-              <stop offset="100%" stopColor="#6366F1" stopOpacity="0.15" />
+              <stop offset="0%" stopColor="#C7D2FE" stopOpacity="0.7" />
+              <stop offset="20%" stopColor="#A5B4FC" stopOpacity="0.5" />
+              <stop offset="50%" stopColor="#818CF8" stopOpacity="0.35" />
+              <stop offset="100%" stopColor="#6366F1" stopOpacity="0.2" />
             </linearGradient>
             <linearGradient id="riverGrad" x1="0%" y1="0%" x2="100%" y2="0%">
               <stop offset="0%" stopColor="#6366F1" stopOpacity="0.05" />
-              <stop offset="30%" stopColor="#818CF8" stopOpacity="0.2" />
-              <stop offset="70%" stopColor="#6366F1" stopOpacity="0.15" />
+              <stop offset="20%" stopColor="#818CF8" stopOpacity="0.25" />
+              <stop offset="50%" stopColor="#A5B4FC" stopOpacity="0.2" />
+              <stop offset="80%" stopColor="#818CF8" stopOpacity="0.25" />
               <stop offset="100%" stopColor="#6366F1" stopOpacity="0.05" />
             </linearGradient>
+            <linearGradient id="riverReflection" x1="0%" y1="0%" x2="0%" y2="100%">
+              <stop offset="0%" stopColor="#C7D2FE" stopOpacity="0.3" />
+              <stop offset="50%" stopColor="#E0E7FF" stopOpacity="0.15" />
+              <stop offset="100%" stopColor="transparent" stopOpacity="0" />
+            </linearGradient>
             <filter id="waterGlow">
-              <feGaussianBlur stdDeviation="3" result="glow" />
-              <feMerge><feMergeNode in="glow" /><feMergeNode in="SourceGraphic" /></feMerge>
+              <feGaussianBlur stdDeviation="4" result="glow" />
+              <feMerge><feMergeNode in="glow" /><feMergeNode in="glow" /><feMergeNode in="SourceGraphic" /></feMerge>
+            </filter>
+            <filter id="mistGlow">
+              <feGaussianBlur stdDeviation="8" />
             </filter>
           </defs>
 
-          {/* Waterfall stream from mountain */}
-          <path d="M720,50 Q722,100 718,150 Q715,200 720,250 Q725,280 730,310" fill="none" stroke="url(#waterfallGrad)" strokeWidth="6" filter="url(#waterGlow)" />
-          {/* Thin highlight line */}
-          <path d="M720,50 Q721,100 719,150 Q717,200 720,250" fill="none" stroke="#C7D2FE" strokeWidth="1" opacity="0.4" />
-          {/* Mist at waterfall base */}
-          <ellipse cx="725" cy="310" rx="30" ry="10" fill="#818CF8" opacity="0.1" />
+          {/* Waterfall stream — multi-layer for depth */}
+          <path d="M720,50 Q722,100 718,150 Q715,200 720,250 Q725,280 730,310" fill="none" stroke="url(#waterfallGrad)" strokeWidth="8" filter="url(#waterGlow)" />
+          {/* Bright center stream */}
+          <path d="M720,55 Q721,105 719,155 Q717,205 720,255 Q724,285 728,310" fill="none" stroke="#E0E7FF" strokeWidth="1.5" opacity="0.5" />
+          {/* Spray/mist at waterfall base */}
+          <ellipse cx="725" cy="308" rx="45" ry="18" fill="#818CF8" opacity="0.12" filter="url(#mistGlow)" />
+          <ellipse cx="725" cy="310" rx="25" ry="8" fill="#A5B4FC" opacity="0.08" filter="url(#mistGlow)" />
 
-          {/* River flowing from waterfall base */}
-          <path d="M730,310 Q780,320 850,315 Q950,310 1050,320 Q1150,325 1250,318 Q1350,312 1440,320" fill="none" stroke="url(#riverGrad)" strokeWidth="8" opacity="0.6" />
-          {/* River glow */}
-          <path d="M730,310 Q780,320 850,315 Q950,310 1050,320 Q1150,325 1250,318 Q1350,312 1440,320" fill="none" stroke="#A5B4FC" strokeWidth="1.5" opacity="0.2" filter="url(#waterGlow)" />
+          {/* River with reflection highlights */}
+          <path d="M730,310 Q780,320 850,315 Q950,310 1050,320 Q1150,325 1250,318 Q1350,312 1440,320" fill="none" stroke="url(#riverGrad)" strokeWidth="10" opacity="0.6" />
+          {/* White/cyan reflection highlights on water surface */}
+          <path d="M750,312 Q820,316 870,313" fill="none" stroke="#E0E7FF" strokeWidth="1" opacity="0.35" />
+          <path d="M950,311 Q1020,318 1080,315" fill="none" stroke="#C7D2FE" strokeWidth="0.8" opacity="0.3" />
+          <path d="M1180,320 Q1230,317 1280,319" fill="none" stroke="#E0E7FF" strokeWidth="0.8" opacity="0.25" />
+          {/* Soft glow on river */}
+          <path d="M730,310 Q780,320 850,315 Q950,310 1050,320 Q1150,325 1250,318 Q1350,312 1440,320" fill="none" stroke="#A5B4FC" strokeWidth="2" opacity="0.2" filter="url(#waterGlow)" />
 
-          {/* Left branch of river */}
-          <path d="M730,310 Q680,325 600,330 Q500,340 400,335 Q300,330 200,338 Q100,342 0,340" fill="none" stroke="url(#riverGrad)" strokeWidth="6" opacity="0.5" />
+          {/* Left branch */}
+          <path d="M730,310 Q680,325 600,330 Q500,340 400,335 Q300,330 200,338 Q100,342 0,340" fill="none" stroke="url(#riverGrad)" strokeWidth="8" opacity="0.5" />
+          {/* Left branch reflections */}
+          <path d="M680,322 Q620,328 560,330" fill="none" stroke="#E0E7FF" strokeWidth="0.8" opacity="0.25" />
+          <path d="M420,336 Q360,332 310,334" fill="none" stroke="#C7D2FE" strokeWidth="0.8" opacity="0.2" />
         </motion.svg>
 
         {/* Extra foreground trees */}
@@ -573,28 +703,48 @@ const ScrollStorytelling = () => {
             <path d="M700,210 Q730,190 760,210" fill="none" stroke="#131136" strokeWidth="4" />
           </g>
 
-          {/* Window lights */}
+          {/* Window lights — WARM GOLD/AMBER for life contrast */}
           <g filter="url(#windowGlow)">
-            <rect x="195" y="160" width="3" height="4" fill="#A5B4FC" opacity="0.6" rx="0.5" />
-            <rect x="215" y="160" width="3" height="4" fill="#A5B4FC" opacity="0.5" rx="0.5" />
-            <rect x="200" y="175" width="3" height="4" fill="#818CF8" opacity="0.4" rx="0.5" />
-            <rect x="262" y="180" width="3" height="4" fill="#A5B4FC" opacity="0.5" rx="0.5" />
-            <rect x="275" y="180" width="3" height="4" fill="#818CF8" opacity="0.4" rx="0.5" />
-            <rect x="140" y="190" width="2" height="3" fill="#A5B4FC" opacity="0.4" rx="0.5" />
-            <rect x="1065" y="165" width="3" height="4" fill="#A5B4FC" opacity="0.5" rx="0.5" />
-            <rect x="1082" y="165" width="3" height="4" fill="#818CF8" opacity="0.4" rx="0.5" />
-            <rect x="1130" y="190" width="3" height="4" fill="#A5B4FC" opacity="0.5" rx="0.5" />
-            <rect x="1145" y="190" width="3" height="4" fill="#818CF8" opacity="0.4" rx="0.5" />
-            <rect x="1010" y="195" width="2" height="3" fill="#A5B4FC" opacity="0.4" rx="0.5" />
-            <rect x="630" y="185" width="2" height="3" fill="#818CF8" opacity="0.4" rx="0.5" />
-            <rect x="678" y="192" width="2" height="3" fill="#A5B4FC" opacity="0.4" rx="0.5" />
+            {/* Left temple complex */}
+            <rect x="195" y="158" width="4" height="5" fill="#FBBF24" opacity="0.7" rx="0.5" />
+            <rect x="195" y="158" width="4" height="5" fill="#FDE68A" opacity="0.3" rx="0.5" /> {/* warm overlay */}
+            <rect x="215" y="158" width="4" height="5" fill="#F59E0B" opacity="0.6" rx="0.5" />
+            <rect x="200" y="173" width="3" height="4" fill="#FBBF24" opacity="0.5" rx="0.5" />
+            <rect x="220" y="173" width="3" height="4" fill="#F59E0B" opacity="0.45" rx="0.5" />
+            <rect x="262" y="178" width="4" height="5" fill="#FBBF24" opacity="0.6" rx="0.5" />
+            <rect x="275" y="178" width="3" height="4" fill="#F59E0B" opacity="0.5" rx="0.5" />
+            <rect x="140" y="188" width="3" height="4" fill="#FBBF24" opacity="0.5" rx="0.5" />
+            <rect x="148" y="192" width="2" height="3" fill="#F59E0B" opacity="0.4" rx="0.5" />
+            {/* Right temple complex */}
+            <rect x="1063" y="163" width="4" height="5" fill="#FBBF24" opacity="0.6" rx="0.5" />
+            <rect x="1080" y="163" width="4" height="5" fill="#F59E0B" opacity="0.55" rx="0.5" />
+            <rect x="1068" y="178" width="3" height="4" fill="#FBBF24" opacity="0.45" rx="0.5" />
+            <rect x="1130" y="188" width="4" height="5" fill="#FBBF24" opacity="0.6" rx="0.5" />
+            <rect x="1145" y="188" width="3" height="4" fill="#F59E0B" opacity="0.5" rx="0.5" />
+            <rect x="1010" y="193" width="3" height="4" fill="#FBBF24" opacity="0.5" rx="0.5" />
+            <rect x="1178" y="198" width="3" height="4" fill="#F59E0B" opacity="0.45" rx="0.5" />
+            {/* Central structures */}
+            <rect x="630" y="183" width="3" height="4" fill="#FBBF24" opacity="0.5" rx="0.5" />
+            <rect x="638" y="188" width="2" height="3" fill="#F59E0B" opacity="0.4" rx="0.5" />
+            <rect x="678" y="190" width="3" height="4" fill="#FBBF24" opacity="0.5" rx="0.5" />
           </g>
 
-          {/* Spire tip glows */}
+          {/* Window light spillage — warm glow halos around windows */}
+          <g opacity="0.15" filter="url(#windowGlow)">
+            <circle cx="197" cy="161" r="8" fill="#FBBF24" />
+            <circle cx="264" cy="181" r="7" fill="#F59E0B" />
+            <circle cx="1065" cy="166" r="8" fill="#FBBF24" />
+            <circle cx="1132" cy="191" r="7" fill="#F59E0B" />
+            <circle cx="632" cy="186" r="6" fill="#FBBF24" />
+          </g>
+
+          {/* Spire tip glows — warm gold beacons */}
           <g filter="url(#windowGlow)">
-            <circle cx="210" cy="70" r="3" fill="#818CF8" opacity="0.8" />
-            <circle cx="1075" cy="78" r="3" fill="#818CF8" opacity="0.8" />
-            <circle cx="145" cy="153" r="2" fill="#6366F1" opacity="0.6" />
+            <circle cx="210" cy="70" r="3.5" fill="#FBBF24" opacity="0.9" />
+            <circle cx="210" cy="70" r="8" fill="#F59E0B" opacity="0.15" /> {/* halo */}
+            <circle cx="1075" cy="78" r="3.5" fill="#FBBF24" opacity="0.85" />
+            <circle cx="1075" cy="78" r="8" fill="#F59E0B" opacity="0.12" />
+            <circle cx="145" cy="153" r="2.5" fill="#F59E0B" opacity="0.7" />
           </g>
         </motion.svg>
 
