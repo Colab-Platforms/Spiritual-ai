@@ -163,7 +163,10 @@ const ScrollStorytelling = () => {
     <div 
       ref={containerRef}
       className="fixed inset-0 overflow-hidden pointer-events-none"
-      style={{ zIndex: -1 }}
+      style={{ 
+        zIndex: -1,
+        background: 'linear-gradient(to bottom, #050810 0%, #0a0d14 30%, #080c12 60%, #040608 100%)',
+      }}
     >
       {/* Animated nebula cloud that fades in */}
       <motion.div 
