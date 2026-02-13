@@ -142,7 +142,7 @@ const Index = () => {
 
           <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
             {howItWorks.map((item, index) => (
-              <div key={index} className="step-card rounded-2xl p-6 text-center relative bg-transparent border border-white/15 hover:border-primary/40 transition-all duration-500">
+              <div key={index} className="step-card rounded-2xl p-6 text-center relative bg-transparent border border-indigo-400/20 hover:border-indigo-400/40 transition-all duration-500">
                 <div className="absolute top-4 left-4 text-5xl font-display text-primary/10">{item.step}</div>
                 <div className="w-14 h-14 mx-auto mb-5 rounded-xl border border-primary/30 flex items-center justify-center">
                   <item.icon className="w-7 h-7 text-primary" />
@@ -171,7 +171,7 @@ const Index = () => {
             {offerings.map((item, index) => (
               <div
                 key={index}
-                className="offer-card rounded-2xl p-6 bg-transparent border border-white/15 hover:border-primary/40 transition-all duration-500 group cursor-pointer hover:shadow-[0_0_30px_rgba(245,195,106,0.15)]"
+                className="offer-card rounded-2xl p-6 bg-transparent border border-indigo-400/20 hover:border-indigo-400/40 transition-all duration-500 group cursor-pointer hover:shadow-[0_0_30px_rgba(99,102,241,0.15)]"
               >
                 <div className="w-12 h-12 mb-4 rounded-lg border border-primary/30 flex items-center justify-center">
                   <item.icon className="w-6 h-6 text-primary" />
@@ -192,7 +192,7 @@ const Index = () => {
       {/* Why Trust Section */}
       <section ref={trustRef} className="relative z-10 py-24" style={{ background: 'transparent' }}>
         <div className="container mx-auto px-4">
-          <div className="rounded-3xl p-8 md:p-12 bg-transparent border border-white/15">
+          <div className="rounded-3xl p-8 md:p-12 bg-transparent border border-indigo-400/20">
             <div className="grid lg:grid-cols-2 gap-12 items-center">
               <div>
                 <div className="inline-flex items-center gap-2 text-primary mb-4">
@@ -216,7 +216,7 @@ const Index = () => {
                 {trustReasons.map((reason, index) => (
                   <div
                     key={index}
-                    className="trust-item flex items-start gap-4 p-4 rounded-xl bg-transparent border border-white/10 hover:border-primary/30 transition-colors"
+                    className="trust-item flex items-start gap-4 p-4 rounded-xl bg-transparent border border-indigo-400/15 hover:border-indigo-400/30 transition-colors"
                   >
                     <div className="w-2 h-2 mt-2 rounded-full bg-primary flex-shrink-0" />
                     <div>
@@ -234,7 +234,7 @@ const Index = () => {
       {/* Newsletter CTA Section */}
       <section className="relative z-10 py-24" style={{ background: 'transparent' }}>
         <div className="container mx-auto px-4">
-          <div className="rounded-3xl p-8 md:p-12 text-center max-w-3xl mx-auto relative overflow-hidden bg-transparent border border-white/15">
+          <div className="rounded-3xl p-8 md:p-12 text-center max-w-3xl mx-auto relative overflow-hidden bg-transparent border border-indigo-400/20">
             {/* Decorative corners */}
             <div className="absolute top-4 left-4 w-8 h-8 border-l-2 border-t-2 border-primary/30" />
             <div className="absolute top-4 right-4 w-8 h-8 border-r-2 border-t-2 border-primary/30" />
