@@ -126,6 +126,10 @@ const ScrollStorytelling = () => {
   const cloudLayerOpacity = useTransform(smoothProgress, [0.55, 0.7, 0.85], [0, 0.7, 0.4]);
   // Phase 4 (80-100%): Earth / ground
   const earthLayerOpacity = useTransform(smoothProgress, [0.75, 0.9], [0, 1]);
+  // Comet transforms (must be at top level, not inside JSX)
+  const cometLeft = useTransform(cometProgress, [0, 1], ['0%', '100%']);
+  const cometTop = useTransform(cometProgress, [0, 1], ['80%', '20%']);
+  const cometOpacity = useTransform(cometProgress, [0, 0.1, 0.9, 1], [0, 1, 1, 0]);
   
   // Spawn shooting stars at intervals during scroll
   useEffect(() => {
@@ -346,9 +350,9 @@ const ScrollStorytelling = () => {
       <motion.div
         className="absolute pointer-events-none"
         style={{
-          left: useTransform(cometProgress, [0, 1], ['0%', '100%']),
-          top: useTransform(cometProgress, [0, 1], ['80%', '20%']),
-          opacity: useTransform(cometProgress, [0, 0.1, 0.9, 1], [0, 1, 1, 0]),
+          left: cometLeft,
+          top: cometTop,
+          opacity: cometOpacity,
         }}
       >
         <div className="relative">
