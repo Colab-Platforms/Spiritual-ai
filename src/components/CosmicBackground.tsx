@@ -33,14 +33,15 @@ const CosmicBackground = () => {
     if (!ctx) return;
 
     const resizeCanvas = () => {
+      // Only render viewport-sized canvas, not full scroll height
       canvas.width = window.innerWidth;
-      canvas.height = document.documentElement.scrollHeight;
+      canvas.height = window.innerHeight;
       initStars();
       initNebulae();
     };
 
     const initStars = () => {
-      const starCount = Math.floor((canvas.width * canvas.height) / 4000);
+      const starCount = Math.min(800, Math.floor((canvas.width * canvas.height) / 6000));
       starsRef.current = [];
       
       for (let i = 0; i < starCount; i++) {
@@ -166,19 +167,10 @@ const CosmicBackground = () => {
     window.addEventListener('mousemove', handleMouseMove);
     window.addEventListener('scroll', handleScroll);
     
-    // Resize observer for dynamic content height changes
-    const resizeObserver = new ResizeObserver(() => {
-      if (canvas.height !== document.documentElement.scrollHeight) {
-        canvas.height = document.documentElement.scrollHeight;
-      }
-    });
-    resizeObserver.observe(document.body);
-    
     return () => {
       window.removeEventListener('resize', handleResize);
       window.removeEventListener('mousemove', handleMouseMove);
       window.removeEventListener('scroll', handleScroll);
-      resizeObserver.disconnect();
       if (animationRef.current) {
         cancelAnimationFrame(animationRef.current);
       }
