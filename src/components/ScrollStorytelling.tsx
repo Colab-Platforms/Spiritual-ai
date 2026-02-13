@@ -116,10 +116,16 @@ const ScrollStorytelling = () => {
   const smoothProgress = useSpring(scrollYProgress, { stiffness: 100, damping: 30 });
   
   // Transform values for different scroll sections
-  const nebulaOpacity = useTransform(smoothProgress, [0.2, 0.4], [0, 0.4]);
-  const galaxyScale = useTransform(smoothProgress, [0.5, 0.7], [0.5, 1]);
-  const galaxyOpacity = useTransform(smoothProgress, [0.5, 0.6], [0, 1]);
-  const cometProgress = useTransform(smoothProgress, [0.7, 0.9], [0, 1]);
+  // Phase 1 (0-30%): Deep space with zodiac constellations
+  const nebulaOpacity = useTransform(smoothProgress, [0.1, 0.25], [0, 0.4]);
+  // Phase 2 (30-60%): Solar system region - deep space stars behind
+  const galaxyScale = useTransform(smoothProgress, [0.3, 0.5], [0.5, 1]);
+  const galaxyOpacity = useTransform(smoothProgress, [0.3, 0.4, 0.55, 0.65], [0, 1, 1, 0]);
+  const cometProgress = useTransform(smoothProgress, [0.4, 0.6], [0, 1]);
+  // Phase 3 (60-80%): Clouds transition
+  const cloudLayerOpacity = useTransform(smoothProgress, [0.55, 0.7, 0.85], [0, 0.7, 0.4]);
+  // Phase 4 (80-100%): Earth / ground
+  const earthLayerOpacity = useTransform(smoothProgress, [0.75, 0.9], [0, 1]);
   
   // Spawn shooting stars at intervals during scroll
   useEffect(() => {
@@ -156,8 +162,8 @@ const ScrollStorytelling = () => {
   return (
     <div 
       ref={containerRef}
-      className="fixed inset-0 overflow-hidden"
-      style={{ zIndex: 0 }}
+      className="fixed inset-0 overflow-hidden pointer-events-none"
+      style={{ zIndex: -1 }}
     >
       {/* Animated nebula cloud that fades in */}
       <motion.div 
@@ -183,7 +189,7 @@ const ScrollStorytelling = () => {
       />
 
       {/* Constellations that appear at scroll milestones - interactive */}
-      <svg className="absolute inset-0 w-full h-full">
+      <svg className="absolute inset-0 w-full h-full" style={{ pointerEvents: 'auto' }}>
         <defs>
           <filter id="starGlow">
             <feGaussianBlur stdDeviation="2" result="coloredBlur"/>
@@ -369,6 +375,84 @@ const ScrollStorytelling = () => {
         </div>
       </motion.div>
 
+      {/* === PHASE 3: Clouds Layer (60-80% scroll) === */}
+      <motion.div
+        className="absolute inset-0 pointer-events-none"
+        style={{
+          opacity: cloudLayerOpacity,
+        }}
+      >
+        {/* Wispy cloud formations */}
+        <div 
+          className="absolute w-full h-1/2 bottom-0"
+          style={{
+            background: `
+              radial-gradient(ellipse 80% 40% at 20% 80%, hsla(215, 20%, 30%, 0.6) 0%, transparent 70%),
+              radial-gradient(ellipse 60% 50% at 60% 90%, hsla(215, 25%, 25%, 0.5) 0%, transparent 60%),
+              radial-gradient(ellipse 90% 30% at 80% 70%, hsla(215, 15%, 35%, 0.4) 0%, transparent 70%)
+            `,
+            filter: 'blur(30px)',
+          }}
+        />
+        <div 
+          className="absolute w-full h-1/3 bottom-0"
+          style={{
+            background: `
+              radial-gradient(ellipse 70% 60% at 40% 100%, hsla(215, 20%, 20%, 0.7) 0%, transparent 60%),
+              radial-gradient(ellipse 50% 40% at 75% 95%, hsla(220, 15%, 25%, 0.5) 0%, transparent 50%)
+            `,
+            filter: 'blur(20px)',
+          }}
+        />
+      </motion.div>
+
+      {/* === PHASE 4: Earth / Ground Layer (80-100% scroll) === */}
+      <motion.div
+        className="absolute inset-0 pointer-events-none"
+        style={{
+          opacity: earthLayerOpacity,
+        }}
+      >
+        {/* Atmospheric glow on horizon */}
+        <div 
+          className="absolute w-full h-1/3 bottom-0"
+          style={{
+            background: `
+              linear-gradient(to top, 
+                hsla(215, 30%, 8%, 1) 0%, 
+                hsla(215, 25%, 12%, 0.9) 30%,
+                hsla(220, 20%, 18%, 0.4) 60%, 
+                transparent 100%
+              )
+            `,
+          }}
+        />
+        {/* Subtle warm horizon glow */}
+        <div 
+          className="absolute w-full h-24 bottom-0"
+          style={{
+            background: `
+              linear-gradient(to top, 
+                hsla(30, 40%, 15%, 0.6) 0%, 
+                hsla(25, 30%, 12%, 0.3) 50%, 
+                transparent 100%
+              )
+            `,
+          }}
+        />
+        {/* Silhouette shapes (temple/forest) */}
+        <svg className="absolute bottom-0 w-full h-48" preserveAspectRatio="none" viewBox="0 0 1440 200">
+          <path 
+            d="M0,200 L0,140 Q60,120 120,130 Q200,110 280,125 L320,90 L340,90 L360,125 Q440,115 520,120 Q600,100 680,110 Q760,95 840,105 L880,70 L900,70 L920,105 Q1000,110 1080,100 Q1160,115 1240,108 Q1320,120 1440,115 L1440,200 Z"
+            fill="hsla(215, 30%, 6%, 1)"
+          />
+          <path 
+            d="M0,200 L0,160 Q100,145 200,155 Q300,140 400,150 Q500,135 600,145 Q700,130 800,140 Q900,125 1000,138 Q1100,130 1200,142 Q1300,135 1440,140 L1440,200 Z"
+            fill="hsla(215, 25%, 4%, 1)"
+          />
+        </svg>
+      </motion.div>
+
       {/* Journey milestone text hints */}
       <JourneyMilestones scrollProgress={smoothProgress} />
     </div>
@@ -524,9 +608,10 @@ const JourneyMilestones = ({
   scrollProgress: ReturnType<typeof useSpring>;
 }) => {
   const milestones = [
-    { progress: 0.2, text: 'Entering the constellation zone...' },
-    { progress: 0.5, text: 'Distant galaxies emerge...' },
-    { progress: 0.75, text: 'A comet crosses your path...' },
+    { progress: 0.15, text: 'Entering the constellation zone...' },
+    { progress: 0.4, text: 'Passing through the Solar System...' },
+    { progress: 0.65, text: 'Descending through the clouds...' },
+    { progress: 0.85, text: 'Approaching the ancient ground...' },
   ];
 
   return (
