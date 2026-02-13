@@ -129,9 +129,9 @@ const Index = () => {
       </Suspense>
 
       {/* How It Works Section */}
-      <section ref={featuresRef} className="relative z-10 py-24 bg-transparent">
+      <section ref={featuresRef} className="relative z-10 py-24" style={{ background: 'transparent' }}>
         <div className="container mx-auto px-4">
-          <div className="text-center mb-16">
+          <div className="text-center mb-16 p-6 rounded-2xl backdrop-blur-md" style={{ background: 'hsla(215, 25%, 6%, 0.5)' }}>
             <h2 className="font-display text-3xl md:text-4xl tracking-wider text-glow text-primary mb-4">
               How It Works
             </h2>
@@ -142,7 +142,7 @@ const Index = () => {
 
           <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
             {howItWorks.map((item, index) => (
-              <div key={index} className="step-card glass-card-hover rounded-2xl p-6 text-center relative">
+              <div key={index} className="step-card rounded-2xl p-6 text-center relative backdrop-blur-md" style={{ background: 'hsla(215, 20%, 8%, 0.6)', border: '1px solid hsla(215, 15%, 18%, 0.5)' }}>
                 <div className="absolute top-4 left-4 text-5xl font-display text-primary/10">{item.step}</div>
                 <div className="w-14 h-14 mx-auto mb-5 rounded-xl border border-primary/30 flex items-center justify-center bg-primary/5">
                   <item.icon className="w-7 h-7 text-primary" />
@@ -156,9 +156,9 @@ const Index = () => {
       </section>
 
       {/* What We Offer Section */}
-      <section ref={offerRef} className="relative z-10 py-24 bg-transparent">
+      <section ref={offerRef} className="relative z-10 py-24" style={{ background: 'transparent' }}>
         <div className="container mx-auto px-4">
-          <div className="text-center mb-16">
+          <div className="text-center mb-16 p-6 rounded-2xl backdrop-blur-md" style={{ background: 'hsla(215, 25%, 6%, 0.5)' }}>
             <h2 className="font-display text-3xl md:text-4xl tracking-wider text-glow text-primary mb-4">
               What We Offer
             </h2>
@@ -171,7 +171,8 @@ const Index = () => {
             {offerings.map((item, index) => (
               <div
                 key={index}
-                className="offer-card glass-card rounded-2xl p-6 border border-border hover:border-primary/40 transition-all duration-500 group cursor-pointer hover:shadow-[0_0_30px_rgba(245,195,106,0.1)]"
+                className="offer-card rounded-2xl p-6 border border-border hover:border-primary/40 transition-all duration-500 group cursor-pointer hover:shadow-[0_0_30px_rgba(245,195,106,0.1)] backdrop-blur-md"
+                style={{ background: 'hsla(215, 20%, 8%, 0.6)' }}
               >
                 <div className="w-12 h-12 mb-4 rounded-lg border border-primary/30 flex items-center justify-center bg-primary/5 group-hover:bg-primary/10 transition-colors">
                   <item.icon className="w-6 h-6 text-primary" />
@@ -190,9 +191,9 @@ const Index = () => {
       <ZodiacWheelSection />
 
       {/* Why Trust Section */}
-      <section ref={trustRef} className="relative z-10 py-24 bg-transparent">
+      <section ref={trustRef} className="relative z-10 py-24" style={{ background: 'transparent' }}>
         <div className="container mx-auto px-4">
-          <div className="glass-card rounded-3xl p-8 md:p-12">
+          <div className="rounded-3xl p-8 md:p-12 backdrop-blur-md" style={{ background: 'hsla(215, 20%, 8%, 0.6)', border: '1px solid hsla(215, 15%, 18%, 0.5)' }}>
             <div className="grid lg:grid-cols-2 gap-12 items-center">
               <div>
                 <div className="inline-flex items-center gap-2 text-primary mb-4">
@@ -232,9 +233,9 @@ const Index = () => {
       </section>
 
       {/* Newsletter CTA Section */}
-      <section className="relative z-10 py-24 bg-transparent">
+      <section className="relative z-10 py-24" style={{ background: 'transparent' }}>
         <div className="container mx-auto px-4">
-          <div className="glass-card rounded-3xl p-8 md:p-12 text-center max-w-3xl mx-auto relative overflow-hidden">
+          <div className="rounded-3xl p-8 md:p-12 text-center max-w-3xl mx-auto relative overflow-hidden backdrop-blur-md" style={{ background: 'hsla(215, 20%, 8%, 0.6)', border: '1px solid hsla(215, 15%, 18%, 0.5)' }}>
             {/* Decorative corners */}
             <div className="absolute top-4 left-4 w-8 h-8 border-l-2 border-t-2 border-primary/30" />
             <div className="absolute top-4 right-4 w-8 h-8 border-r-2 border-t-2 border-primary/30" />
