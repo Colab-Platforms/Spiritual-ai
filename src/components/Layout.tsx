@@ -1,7 +1,6 @@
 import { ReactNode } from 'react';
 import Navbar from './Navbar';
 import Footer from './Footer';
-import CosmicBackground from './CosmicBackground';
 import ScrollStorytelling from './ScrollStorytelling';
 
 interface LayoutProps {
@@ -11,10 +10,7 @@ interface LayoutProps {
 const Layout = ({ children }: LayoutProps) => {
   return (
     <div className="relative min-h-screen overflow-x-hidden">
-      {/* Cosmic Background - base layer */}
-      <CosmicBackground />
-      
-      {/* Scroll-driven storytelling elements - blended on top */}
+      {/* Scroll-driven storytelling background */}
       <ScrollStorytelling />
       
       {/* Grain overlay for texture */}
