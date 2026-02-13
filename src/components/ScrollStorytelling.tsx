@@ -117,10 +117,11 @@ const ScrollStorytelling = () => {
   
   // Transform values for different scroll sections
   // Phase 1 (0-30%): Deep space with zodiac constellations
-  const nebulaOpacity = useTransform(smoothProgress, [0.1, 0.25], [0, 0.4]);
+  const nebulaOpacity = useTransform(smoothProgress, [0, 0.15], [0.3, 0.8]);
+  const topNebulaOpacity = useTransform(smoothProgress, [0, 0.1], [0.6, 0.9]);
   // Phase 2 (30-60%): Solar system region - deep space stars behind
   const galaxyScale = useTransform(smoothProgress, [0.3, 0.5], [0.5, 1]);
-  const galaxyOpacity = useTransform(smoothProgress, [0.3, 0.4, 0.55, 0.65], [0, 1, 1, 0]);
+  const galaxyOpacity = useTransform(smoothProgress, [0.25, 0.35, 0.55, 0.65], [0, 0.9, 0.9, 0]);
   const cometProgress = useTransform(smoothProgress, [0.4, 0.6], [0, 1]);
   // Phase 3 (60-80%): Clouds transition
   const cloudLayerOpacity = useTransform(smoothProgress, [0.55, 0.7, 0.85], [0, 0.7, 0.4]);
@@ -172,25 +173,55 @@ const ScrollStorytelling = () => {
         background: 'linear-gradient(to bottom, #050810 0%, #0a0d14 30%, #080c12 60%, #040608 100%)',
       }}
     >
-      {/* Animated nebula cloud that fades in */}
+      {/* Top nebula — visible immediately for a "space" feel */}
       <motion.div 
-        className="absolute w-[600px] h-[600px] rounded-full pointer-events-none"
+        className="absolute pointer-events-none"
+        style={{
+          opacity: topNebulaOpacity,
+          left: '30%',
+          top: '-5%',
+          width: '800px',
+          height: '600px',
+          background: 'radial-gradient(ellipse at center, hsla(240, 60%, 40%, 0.45) 0%, hsla(260, 50%, 30%, 0.25) 35%, transparent 70%)',
+          filter: 'blur(80px)',
+        }}
+      />
+      <motion.div 
+        className="absolute pointer-events-none"
+        style={{
+          opacity: topNebulaOpacity,
+          right: '-5%',
+          top: '5%',
+          width: '500px',
+          height: '500px',
+          background: 'radial-gradient(ellipse at center, hsla(220, 70%, 45%, 0.4) 0%, hsla(230, 50%, 30%, 0.2) 40%, transparent 70%)',
+          filter: 'blur(70px)',
+        }}
+      />
+
+      {/* Mid-section golden nebula */}
+      <motion.div 
+        className="absolute pointer-events-none"
         style={{
           opacity: nebulaOpacity,
-          left: '60%',
-          top: '20%',
-          background: 'radial-gradient(ellipse at center, hsla(40, 70%, 50%, 0.15) 0%, hsla(40, 60%, 40%, 0.08) 40%, transparent 70%)',
+          left: '55%',
+          top: '25%',
+          width: '700px',
+          height: '700px',
+          background: 'radial-gradient(ellipse at center, hsla(40, 70%, 50%, 0.35) 0%, hsla(40, 60%, 40%, 0.18) 40%, transparent 70%)',
           filter: 'blur(60px)',
         }}
       />
       
       <motion.div 
-        className="absolute w-[400px] h-[400px] rounded-full pointer-events-none"
+        className="absolute pointer-events-none"
         style={{
           opacity: nebulaOpacity,
-          left: '10%',
-          top: '50%',
-          background: 'radial-gradient(ellipse at center, hsla(200, 50%, 40%, 0.12) 0%, hsla(220, 40%, 30%, 0.06) 40%, transparent 70%)',
+          left: '5%',
+          top: '45%',
+          width: '500px',
+          height: '500px',
+          background: 'radial-gradient(ellipse at center, hsla(200, 50%, 40%, 0.3) 0%, hsla(220, 40%, 30%, 0.15) 40%, transparent 70%)',
           filter: 'blur(50px)',
         }}
       />
@@ -481,7 +512,7 @@ const ConstellationGroup = ({
   const visibility = useTransform(
     scrollProgress,
     [constellation.triggerProgress - 0.05, constellation.triggerProgress, constellation.triggerProgress + 0.1],
-    [0, 0.3, 1]
+    [0, 0.7, 1]
   );
   
   const lineProgress = useTransform(

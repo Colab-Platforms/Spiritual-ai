@@ -67,9 +67,8 @@
   }
 
   body {
-    @apply bg-background text-foreground antialiased;
+    @apply bg-transparent text-foreground antialiased;
     font-family: 'Iceland', sans-serif;
-    background: linear-gradient(180deg, hsl(215 30% 5%) 0%, hsl(215 25% 7%) 50%, hsl(215 20% 9%) 100%);
     min-height: 100vh;
   }
 
