@@ -1,0 +1,107 @@
+/* Custom font imports - must come first */
+@import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700;800;900&family=Inter:wght@300;400;500;600;700&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Base styles for dark theme */
+@layer base {
+  html {
+    @apply scroll-smooth;
+  }
+
+  body {
+    @apply bg-cosmic-black text-cosmic-text font-inter;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-poppins font-bold;
+  }
+
+  h1 {
+    @apply text-4xl;
+  }
+
+  h2 {
+    @apply text-3xl;
+  }
+
+  h3 {
+    @apply text-2xl;
+  }
+
+  h4 {
+    @apply text-xl;
+  }
+
+  h5 {
+    @apply text-lg;
+  }
+
+  h6 {
+    @apply text-base;
+  }
+
+  p {
+    @apply font-inter;
+  }
+
+  a {
+    @apply text-cosmic-orange hover:text-cosmic-orange-light transition-colors;
+  }
+
+  button {
+    @apply transition-all duration-300;
+  }
+}
+
+/* Glassmorphism component */
+@layer components {
+  .glassmorphism {
+    @apply bg-cosmic-card/40 backdrop-blur-md border border-cosmic-orange/20 rounded-lg;
+  }
+
+  .glassmorphism-dark {
+    @apply bg-cosmic-dark/40 backdrop-blur-md border border-cosmic-orange/10 rounded-lg;
+  }
+
+  .glow-orange {
+    @apply shadow-cosmic-glow;
+  }
+
+  .glow-lg {
+    @apply shadow-cosmic-glow-lg;
+  }
+
+  .btn-primary {
+    @apply px-6 py-3 bg-cosmic-orange text-cosmic-black font-poppins font-bold rounded-lg hover:bg-cosmic-orange-light hover:shadow-cosmic-glow transition-all duration-300;
+  }
+
+  .btn-secondary {
+    @apply px-6 py-3 bg-cosmic-dark text-cosmic-text font-poppins font-bold rounded-lg border border-cosmic-orange hover:shadow-cosmic-glow transition-all duration-300;
+  }
+}
+
+/* Smooth scrolling */
+html {
+  scroll-behavior: smooth;
+}
+
+/* Remove default scrollbar styling for custom scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #0B0F1A;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #6A5ACD;
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #D4AF37;
+}
