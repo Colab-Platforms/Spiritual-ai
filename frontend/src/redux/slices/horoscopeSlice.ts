@@ -7,7 +7,7 @@ export interface HoroscopeData {
   horoscope: string;
 }
 
-interface HoroscopeState {
+export interface HoroscopeState {
   daily: HoroscopeData | null;
   weekly: HoroscopeData | null;
   monthly: HoroscopeData | null;
@@ -88,7 +88,16 @@ const horoscopeSlice = createSlice({
   name: 'horoscope',
   initialState,
   reducers: {
-    clearHoroscope: (state) => {
+    setHoroscopeData: (state, action) => {
+      state.daily = action.payload;
+    },
+    setHoroscopeLoading: (state, action) => {
+      state.loading = action.payload;
+    },
+    setHoroscopeError: (state, action) => {
+      state.error = action.payload;
+    },
+    clearHoroscopeData: (state) => {
       state.daily = null;
       state.weekly = null;
       state.monthly = null;
@@ -158,5 +167,12 @@ const horoscopeSlice = createSlice({
   },
 });
 
-export const { clearHoroscope, setSelectedSign, clearError } = horoscopeSlice.actions;
+export const { 
+  setHoroscopeData, 
+  setHoroscopeLoading, 
+  setHoroscopeError, 
+  clearHoroscopeData, 
+  setSelectedSign, 
+  clearError 
+} = horoscopeSlice.actions;
 export default horoscopeSlice.reducer;

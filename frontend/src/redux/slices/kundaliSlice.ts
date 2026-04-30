@@ -1,4 +1,4 @@
-import { createSlice, createAsyncThunk, PayloadAction } from '@reduxjs/toolkit';
+import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import { astroApiClient } from '../../services/astroApiClient';
 
 export interface BirthData {
@@ -10,36 +10,42 @@ export interface BirthData {
   timezone?: number;
 }
 
+export interface Planet {
+  name: string;
+  sign: string;
+  degree: number;
+  house: number;
+}
+
+export interface House {
+  number: number;
+  sign: string;
+  degree: number;
+}
+
+export interface BirthChart {
+  ascendant: string;
+  moonSign: string;
+  sunSign: string;
+  planets: Planet[];
+  houses: House[];
+  yogas: string[];
+  zodiacSign: string;
+  placeOfBirth: string;
+  latitude: number;
+  longitude: number;
+  timezone: number;
+}
+
 export interface KundaliData {
   _id: string;
   userId: string;
-  birthChart: {
-    ascendant: string;
-    moonSign: string;
-    sunSign: string;
-    planets: Array<{
-      name: string;
-      sign: string;
-      degree: number;
-      house: number;
-    }>;
-    houses: Array<{
-      number: number;
-      sign: string;
-      degree: number;
-    }>;
-    yogas: string[];
-    zodiacSign: string;
-    placeOfBirth: string;
-    latitude: number;
-    longitude: number;
-    timezone: number;
-  };
+  birthChart: BirthChart;
   createdAt: string;
   updatedAt: string;
 }
 
-interface KundaliState {
+export interface KundaliState {
   data: KundaliData | null;
   loading: boolean;
   error: string | null;
@@ -86,7 +92,19 @@ const kundaliSlice = createSlice({
   name: 'kundali',
   initialState,
   reducers: {
-    clearKundali: (state) => {
+    setKundaliData: (state, action) => {
+      state.data = action.payload;
+    },
+    setKundaliLoading: (state, action) => {
+      state.loading = action.payload;
+    },
+    setKundaliError: (state, action) => {
+      state.error = action.payload;
+    },
+    setAnimationComplete: (state, action) => {
+      state.success = action.payload;
+    },
+    clearKundaliData: (state) => {
       state.data = null;
       state.error = null;
       state.success = false;
@@ -129,5 +147,12 @@ const kundaliSlice = createSlice({
   },
 });
 
-export const { clearKundali, clearError } = kundaliSlice.actions;
+export const { 
+  setKundaliData, 
+  setKundaliLoading, 
+  setKundaliError, 
+  setAnimationComplete, 
+  clearKundaliData, 
+  clearError 
+} = kundaliSlice.actions;
 export default kundaliSlice.reducer;

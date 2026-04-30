@@ -11,10 +11,10 @@ export const FinalCTASection: React.FC = () => {
 
     // Pulse animation for button
     gsap.to(buttonRef.current, {
-      boxShadow: [
-        '0 0 20px rgba(212, 175, 55, 0.5)',
-        '0 0 40px rgba(212, 175, 55, 0.8)',
-        '0 0 20px rgba(212, 175, 55, 0.5)',
+      keyframes: [
+        { boxShadow: '0 0 20px rgba(212, 175, 55, 0.5)' },
+        { boxShadow: '0 0 40px rgba(212, 175, 55, 0.8)' },
+        { boxShadow: '0 0 20px rgba(212, 175, 55, 0.5)' },
       ],
       duration: 2,
       repeat: -1,

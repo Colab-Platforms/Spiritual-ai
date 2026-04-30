@@ -38,7 +38,7 @@ export {
   setHoroscopeError,
   clearHoroscopeData,
 } from './slices/horoscopeSlice';
-export type { HoroscopeState, HoroscopeEntry } from './slices/horoscopeSlice';
+export type { HoroscopeState, HoroscopeData } from './slices/horoscopeSlice';
 
 // Middleware
 export {

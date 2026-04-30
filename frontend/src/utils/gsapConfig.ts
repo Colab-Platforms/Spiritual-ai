@@ -8,7 +8,7 @@ let scrollTriggerRegistered = false;
  * Ensure ScrollTrigger is registered
  */
 const ensureScrollTriggerRegistered = (): void => {
-  if (!scrollTriggerRegistered && !gsap.plugins.scrollTrigger) {
+  if (!scrollTriggerRegistered) {
     try {
       gsap.registerPlugin(ScrollTrigger);
       scrollTriggerRegistered = true;
@@ -59,8 +59,8 @@ export const initializeGSAP = (): void => {
   gsap.defaults({ ease: 'power2.inOut' });
 
   // Disable GSAP warnings in production
-  if (process.env.NODE_ENV === 'production') {
-    gsap.config({ nullTargetAction: 'ignore' });
+  if (import.meta.env.PROD) {
+    gsap.config({ nullTargetWarn: false });
   }
 
   // Register ScrollTrigger

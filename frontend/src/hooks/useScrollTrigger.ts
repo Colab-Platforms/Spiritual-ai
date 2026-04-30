@@ -6,7 +6,7 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger';
 let scrollTriggerRegistered = false;
 
 const ensureScrollTriggerRegistered = (): void => {
-  if (!scrollTriggerRegistered && !gsap.plugins.scrollTrigger) {
+  if (!scrollTriggerRegistered) {
     try {
       gsap.registerPlugin(ScrollTrigger);
       scrollTriggerRegistered = true;

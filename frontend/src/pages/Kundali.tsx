@@ -3,7 +3,6 @@ import { useDispatch, useSelector } from 'react-redux';
 import { fetchKundali } from '../redux/slices/kundaliSlice';
 import { RootState, AppDispatch } from '../redux/store';
 import BirthChart from '../components/BirthChart';
-import TabNavigation from '../components/TabNavigation';
 import PlanetPositionsTab from '../components/PlanetPositionsTab';
 import HousesTab from '../components/HousesTab';
 import { useState } from 'react';
@@ -130,7 +129,7 @@ export const Kundali: React.FC = () => {
         <div className="bg-cosmic-card/40 backdrop-blur-sm border border-cosmic-orange/20 rounded-2xl p-8 md:p-12">
           {activeTab === 'chart' && <BirthChart birthChart={birthChart} />}
           {activeTab === 'planets' && <PlanetPositionsTab planets={birthChart.planets} />}
-          {activeTab === 'houses' && <HousesTab houses={birthChart.houses} />}
+          {activeTab === 'houses' && <HousesTab birthChart={birthChart} />}
         </div>
 
         {/* Birth Data Info */}

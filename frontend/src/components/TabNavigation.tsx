@@ -14,11 +14,9 @@ interface TabNavigationProps {
 
 export const TabNavigation: React.FC<TabNavigationProps> = ({ tabs, defaultTabId }) => {
   const [activeTabId, setActiveTabId] = useState(defaultTabId || tabs[0]?.id);
-  const [prevTabId, setPrevTabId] = useState<string | null>(null);
 
   const handleTabChange = (tabId: string) => {
     if (tabId !== activeTabId) {
-      setPrevTabId(activeTabId);
       setActiveTabId(tabId);
     }
   };
